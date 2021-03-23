@@ -5,12 +5,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import SignupActivity from './pages/SignupActivity';
 import LoginActivity from './pages/LoginActivity';
+import Home from './pages/Home';
 
 const Stack = createStackNavigator();
 const App = ({ navigation }) => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName = "Login">
+        
         <Stack.Screen
           name="Signup"
           component={SignupActivity}
@@ -18,6 +20,12 @@ const App = ({ navigation }) => {
         />
         <Stack.Screen name="Login" component={LoginActivity}
           options={{headerShown: false}} />
+        <Stack.Screen
+          name = "Home"
+          component = {Home}
+          options = {{headerShown: false}}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
