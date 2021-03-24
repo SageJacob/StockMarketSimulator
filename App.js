@@ -18,8 +18,11 @@ const App = ({ navigation }) => {
           component={SignupActivity}
           options={{ title: 'Welcome', headerShown: false }}
         />
-        <Stack.Screen name="Login" component={LoginActivity}
-          options={{headerShown: false}} />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginActivity}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name = "Home"
           component = {Home}
