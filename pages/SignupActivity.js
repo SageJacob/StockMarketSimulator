@@ -22,7 +22,7 @@ const SignupActivity = ({ navigation }) => {
       <View
         style={styles.container}>
         <Text
-          style={styles.login}>Signup</Text>
+          style={styles.login}>Register</Text>
         <Text numberOfLines={3}></Text>
 
         {components}
