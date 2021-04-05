@@ -11,25 +11,28 @@ const Stack = createStackNavigator();
 const App = ({ navigation }) => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName = "Login">
-        
+      <Stack.Navigator initialRouteName="Login">
+
         <Stack.Screen
           name="Signup"
           component={SignupActivity}
           options={{ title: 'Welcome', headerShown: false }}
         />
-        <Stack.Screen 
-          name="Login" 
-          component={LoginActivity}
-          options={{headerShown: false}}
-        />
+
         <Stack.Screen
-          name = "Home"
-          component = {Home}
-          options = {{headerShown: false}}
+          name="Login"
+          component={LoginActivity}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
         />
 
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 };
@@ -38,9 +41,9 @@ const App = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:'20%',
+    paddingTop: '20%',
     alignItems: "center",
-    backgroundColor:'#8C8C8C',
+    backgroundColor: '#8C8C8C',
   },
   login: {
     fontSize: 30,
