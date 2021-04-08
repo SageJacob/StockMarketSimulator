@@ -18,7 +18,8 @@ const LoginActivity = ({ navigation }) => {
       <View style={styles.container}>
         <Rectangle></Rectangle>
         <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
-        <Text style={styles.title}>GetTrading</Text>
+        <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
+
         <View style={styles.text}>
           <Text
             style={styles.login}>Login</Text>
@@ -55,7 +56,7 @@ const LoginActivity = ({ navigation }) => {
 
     container: {
       alignItems: 'center',
-      top: '7%'
+      top: '6%'
     },
     
     title: {
@@ -85,6 +86,15 @@ const LoginActivity = ({ navigation }) => {
       left: '20%',
       width: '80%',
       height: '100%',
+      resizeMode: 'contain',
+      position: 'absolute'
+    },
+
+    title_image: {
+      top: '-75%',
+      left: '-105%',
+      width: '300%',
+      height: '350%',
       resizeMode: 'contain',
       position: 'absolute'
     },
