@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Text, View, Button, TextInput, StyleSheet, 
           Dimensions, TouchableOpacity, Image } from 'react-native';
+import axios from 'axios';
 
 const screen = Dimensions.get("screen");
 const backColor       =   'white';
@@ -16,9 +17,38 @@ const Rectangle = () => {
   return <View style={styles.rectangle} />;
 };
 
+
 const SignupActivity = ({ navigation }) => {
+    const postCall = () => {
+      axios
+        .post('https://group20-stocksimulatorv2.herokuapp.com/api/auth/register', {
+        "FirstName": first,
+        "LastName": last,
+        "Email": email,
+        "Login": user,
+        "Password": pass,
+        "Password2": confirm
+      })
+        .then(function (response) {
+          let res = response.data;
+          alert(JSON.stringify(res)); 
+        })
+        .catch(function (error) {
+          // handle error
+          alert(error);
+        });
+    };
+    let [first, onChangeFirst] = React.useState(null);
+    let [last, onChangeLast] = React.useState(null);
+    let [email, onChangeEmail] = React.useState(null);
+    let [user, onChangeUser] = React.useState(null);
+    let [pass, onChangePass] = React.useState(null);
+    let [confirm, onChangeConfirm] = React.useState(null);
+    let arr1 = [first, last, email, user, pass, confirm];
+    let arr2 = [onChangeFirst, onChangeLast, onChangeEmail, onChangeUser, onChangePass, onChangeConfirm];
     let placeholders = ['First name', 'Last name', 'Email', 'Username', 
                         'Password', 'Confirm Password'];
+
     let components = [];
     for (let i = 0; i < placeholders.length; i++)
       components.push(
@@ -27,6 +57,8 @@ const SignupActivity = ({ navigation }) => {
           style={styles.textBox}
           placeholder={placeholders[i]}
           placeholderTextColor='black'
+          onChangeText={arr2[i]}
+          value={arr1[i]}
         />
         <Text numberOfLines={1}></Text>
         </View>
@@ -47,7 +79,7 @@ const SignupActivity = ({ navigation }) => {
 
             <TouchableOpacity
               style={styles.create}
-              onPress={() => navigation.navigate('Login')}
+              onPress={postCall}
             >
 
             <Text style={styles.btnText}> Create Account</Text>

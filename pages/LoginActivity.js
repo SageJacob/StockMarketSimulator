@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Text, View, Button, TextInput, ImageBackground, 
           Image, Dimensions, StyleSheet } from 'react-native';
+import axios from 'axios';
           
 const screen = Dimensions.get("screen");
 const LoginButton = '#84ba5b';
@@ -10,53 +11,84 @@ const Rectangle = () => {
   return <View style={styles.rectangle} />;
 };
 
+let user = '';
+let pass = '';
 
+const handleUser = (text) => {
+  user = text;
+}
+
+const handlePass = (text) => {
+  pass = text;
+}
 
 
 const LoginActivity = ({ navigation }) => {
-    return (
-      <View style={styles.container}>
-        <Rectangle></Rectangle>
-        <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
-        <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
+  
+  const postCall = () => {
+    axios
+      .post('https://app.swaggerhub.com/apis/group20/Group20Stonks/1.0.0#/Users/Login', {
+        "Login": user,
+        "Password": pass
+      })
+      .then(function (response) {
+        let res = response.data;
+        alert(res);
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error);
+      });
+  };
 
-        <View style={styles.text}>
-          <Text
-            style={styles.login}>Login</Text>
-            
-          <Text numberOfLines={3}></Text>
 
-          <TextInput
-            style={styles.textBox}
-            placeholder="Enter username"
-            placeholderTextColor='black'/>
 
-          <Text numberOfLines={3}></Text>
+  return (
+    <View style={styles.container}>
+      <Rectangle></Rectangle>
+      <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
+      <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
 
-          <TextInput
-            style={styles.textBox}
-            placeholder="Enter password"
-            placeholderTextColor='black'/>
+      <View style={styles.text}>
+        <Text
+          style={styles.login}>Login</Text>
+          
+        <Text numberOfLines={3}></Text>
 
-          <Text numberOfLines={3}></Text>
-          <Button color={LoginButton} title=" Login " onPress={() => navigation.navigate('Home')} />
+        <TextInput
+          style={styles.textBox}
+          placeholder="Enter username"
+          placeholderTextColor='black'
+          onChangeText = {handleUser}
+          />
 
-          <Text numberOfLines={1}></Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.new}>New? </Text>
-            <Text style={styles.signup} onPress= {() => navigation.navigate('Signup')}>Sign up here.</Text>
-          </View>
+        <Text numberOfLines={3}></Text>
+
+        <TextInput
+          style={styles.textBox}
+          placeholder="Enter password"
+          placeholderTextColor='black'
+          onChangeText = {handlePass}/>
+
+        <Text numberOfLines={3}></Text>
+        <Button color={LoginButton} title=" Login " onPress={postCall} />
+
+        <Text numberOfLines={1}></Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.new}>New? </Text>
+          <Text style={styles.signup} onPress= {() => navigation.navigate('Signup')}>Sign up here.</Text>
         </View>
       </View>
-    )
-  }
+    </View>
+  )
+}
 
 
   const styles = StyleSheet.create({
 
     container: {
       alignItems: 'center',
-      top: '6%'
+      top: '8%'
     },
     
     title: {
@@ -73,7 +105,7 @@ const LoginActivity = ({ navigation }) => {
 
     rectangle: {
       width: screen.width / 1.25,
-      height: screen.height / 1.25,
+      height: (screen.height / 10) * 8,
       backgroundColor: "grey",
       opacity: 0.4,
       borderRadius: 50,
