@@ -4,6 +4,8 @@ import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-na
 import Portfolio from './Portfolio';
 import Account from './Account';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import * as SecureStore from 'expo-secure-store';
+import {getToken} from './LoginActivity';
 
 const Tabs = createMaterialTopTabNavigator();
 
@@ -16,6 +18,7 @@ const MoneyInvested = () => {
     </View>
   )
 }
+
 
 const data = [
   { x: 0, y: 0 },

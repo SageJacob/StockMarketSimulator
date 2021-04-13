@@ -8,6 +8,7 @@ import axios from 'axios';
 const screen = Dimensions.get("screen");
 const LoginButton = '#84ba5b';
 const TitleColor = '#142949';
+let global_user = '';
 
 const Rectangle = () => {
   return <View style={styles.rectangle} />;
@@ -34,8 +35,7 @@ const LoginActivity = ({ navigation }) => {
         "Password": pass
       })
       .then(function (response) {
-        let res = response.data;
-        alert(res);
+        global_user = user;
         navigation.navigate('Home');
       })
       .catch(function (error) {
@@ -156,4 +156,5 @@ const styles = StyleSheet.create({
   },
 });
 
+export {global_user};
 export default LoginActivity;

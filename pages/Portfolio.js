@@ -1,6 +1,8 @@
 import React from 'react';
 import { Text, StyleSheet, View, TextInput, FlatList } from 'react-native';
 import axios from 'axios';
+import {global_user} from './LoginActivity';
+
 
 const SearchBar = () => {
   const postCall = () => {
@@ -72,15 +74,15 @@ const StockCard = () => {
     </View>
   )
 }
-
 const Portfolio = ({ navigation }) => {
+
   React.useEffect(() => {
 
     const postCall = navigation.addListener('focus', () => {
       axios
         .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
           // TODO: use login variable
-          "Login": "SH13"
+          "Login": global_user
         })
         .then(function (response) {
           let res = response.data;
