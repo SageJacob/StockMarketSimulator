@@ -26,8 +26,6 @@ const data = [
 ];
 
 const MoneyGraph = () => {
-
-
   return (
     <View style={styles.graphArea}>
       <VictoryChart
@@ -113,8 +111,8 @@ function Home() {
   return (
 
     <Tabs.Navigator initialRouteName="Home">
-      <Tabs.Screen name="Home" component={HomeScreen} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />
+      <Tabs.Screen name="Home" component={HomeScreen} />
       <Tabs.Screen name="Account" component={Account} />
     </Tabs.Navigator>
   );

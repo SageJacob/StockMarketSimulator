@@ -1,19 +1,41 @@
 import React from 'react';
 import { Text, StyleSheet, View, TextInput, FlatList } from 'react-native';
+import axios from 'axios';
 
 const SearchBar = () => {
+  const postCall = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/stock/search', {
+        "Query": query
+      })
+      .then(function (response) {
+        let res = response.data;
+        alert(JSON.stringify(res));
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  };
+
+  let [query, onChangeQuery] = React.useState(null);
+
   return (
     <View style={styles.searchContainer}>
       <TextInput
         placeholder="Search a stock..."
         placeholderTextColor="black"
         style={styles.search}
+        onChangeText={onChangeQuery}
+        value={query}
+        onSubmitEditing={postCall}
       />
     </View>
   )
 }
 
 const StockList = () => {
+
+
   return (
     <View style={styles.listContainer}>
       <FlatList
@@ -51,7 +73,27 @@ const StockCard = () => {
   )
 }
 
-const Portfolio = () => {
+const Portfolio = ({ navigation }) => {
+  React.useEffect(() => {
+
+    const postCall = navigation.addListener('focus', () => {
+      axios
+        .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
+          // TODO: use login variable
+          "Login": "SH13"
+        })
+        .then(function (response) {
+          let res = response.data;
+          alert(JSON.stringify(res));
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    });
+
+    return postCall;
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <SearchBar />
