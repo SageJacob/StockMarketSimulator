@@ -1,7 +1,8 @@
-import React from 'react';
-import { Text, StyleSheet, View, TextInput, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, TextInput, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { Card } from 'react-native-paper';
 import axios from 'axios';
-import {global_user} from './LoginActivity';
+import { global_user } from './LoginActivity';
 
 
 const SearchBar = () => {
@@ -36,44 +37,90 @@ const SearchBar = () => {
 }
 
 const StockList = () => {
-
-
   return (
     <View style={styles.listContainer}>
       <FlatList
-        data={[
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-          { key: 'StockCard' },
-        ]}
-        renderItem={({ item }) => (
-          <StockCard />
-        )}
+        data={DATA}
+        renderItem={({ item }) => <ListCard company={item} />}
       />
     </View>
   )
 }
 
-const StockCard = () => {
+const DATA = [
+  {
+    name: 'AMZ',
+    shares: '3',
+    price: '3,067.53',
+    change: '-0.27',
+    key: '1'
+  },
+
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '2'
+  },
+
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '3'
+  },
+
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '4'
+  },
+
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '5'
+  },
+
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '6'
+  },
+  {
+    name: 'AAPL',
+    shares: '4',
+    price: '132.03',
+    change: '-1.79',
+    key: '7'
+  }
+]
+
+const ListCard = ({ company }) => {
   return (
-    <View style={styles.cardContainer}>
-      <View style={{ alignItems: 'flex-start' }}>
-        <Text style={{ color: 'blue', fontSize: 25 }}>AMZ</Text>
-        <Text style={{ color: 'black', fontSize: 12 }}>3 Shares</Text>
+    <TouchableOpacity onPress={() => alert('pressed')}>
+      <View style={styles.cardContainer}>
+        <View style={{ alignItems: 'flex-start' }}>
+          <Text style={{ color: 'blue', fontSize: 25 }}>{company.name}</Text>
+          <Text style={{ color: 'black', fontSize: 12 }}>{company.shares} Shares</Text>
+        </View>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Text style={{ color: 'green', fontSize: 25 }}>${company.price}</Text>
+          <Text style={{ color: 'red', fontSize: 12 }}>{company.change}%</Text>
+        </View>
       </View>
-      <View style={{ alignItems: 'flex-end' }}>
-        <Text style={{ color: 'green', fontSize: 25 }}>$3,067.53</Text>
-        <Text style={{ color: 'red', fontSize: 12 }}>-0.27%</Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   )
 }
+
 const Portfolio = ({ navigation }) => {
 
   React.useEffect(() => {
@@ -81,7 +128,6 @@ const Portfolio = ({ navigation }) => {
     const postCall = navigation.addListener('focus', () => {
       axios
         .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-          // TODO: use login variable
           "Login": global_user
         })
         .then(function (response) {
@@ -96,11 +142,11 @@ const Portfolio = ({ navigation }) => {
     return postCall;
   }, [navigation]);
 
+
   return (
     <View style={styles.container}>
       <SearchBar />
       <StockList />
-
     </View>
   )
 }
