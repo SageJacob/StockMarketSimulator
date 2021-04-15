@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import {
   Text, View, Button, TextInput, ImageBackground,
-  Image, Dimensions, StyleSheet
+  Image, Dimensions, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const screen = Dimensions.get("screen");
 const LoginButton = '#84ba5b';
 const TitleColor = '#142949';
+const TextColor = 'silver';
 let global_user = '';
 
 const Rectangle = () => {
@@ -47,112 +49,123 @@ const LoginActivity = ({ navigation }) => {
 
 
   return (
-    <View style={styles.container}>
-      <Rectangle></Rectangle>
-      <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
-      <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
 
-      <View style={styles.text}>
-        <Text
-          style={styles.login}>Login</Text>
+      <LinearGradient
+          colors={['rgba(  0, 92, 222   ,0.9)', 'rgba(  0, 0, 0 ,0.9)']}
+          style={styles.background}
+          start={{ x: 0.1, y: 0.1 }}>
+      <View style={{flex: 1, alignItems: 'center', alignContent: 'center'}}>
+        <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
+        <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
+        <View style={styles.text}>
+          {/*<Text style={styles.name}>StockHub</Text>*/}
 
-        <Text numberOfLines={3}></Text>
+          <TextInput
+            style={styles.textBox}
+            placeholder="Enter username"
+            placeholderTextColor='silver'
+            onChangeText={handleUser}
+          />
 
-        <TextInput
-          style={styles.textBox}
-          placeholder="Enter username"
-          placeholderTextColor='black'
-          onChangeText={handleUser}
-        />
+          <Text numberOfLines={1}></Text>
 
-        <Text numberOfLines={3}></Text>
+          <TextInput
+            style={styles.textBox}
+            placeholder="Enter password"
+            placeholderTextColor='silver'
+            onChangeText={handlePass} />
+          <Text numberOfLines={1}></Text>
 
-        <TextInput
-          style={styles.textBox}
-          placeholder="Enter password"
-          placeholderTextColor='black'
-          onChangeText={handlePass} />
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{fontSize: 14, color: TextColor}}>Forgot your password? </Text>
+            <Text style={{fontSize: 14, color: TextColor, textDecorationLine: 'underline'}} onPress={() => navigation.navigate('Signup')}>Reset it here.</Text>
+          </View>
 
-        <Text numberOfLines={3}></Text>
-        <Button color={LoginButton} title=" Login " onPress={postCall} />
+          <Text numberOfLines={1}></Text>
+          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("Home")}>
+          <LinearGradient
+                colors={['rgba(22,48,79,0.8)', 'rgba(61,152,172,0.8)']}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }}
+                style={styles.gradient}>
+              <Text style={{color: TextColor, top: 3, fontSize: 25}}>Log in</Text>
+          </LinearGradient>
+          </TouchableOpacity>
 
-        <Text numberOfLines={1}></Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.new}>New? </Text>
-          <Text style={styles.signup} onPress={() => navigation.navigate('Signup')}>Sign up here.</Text>
+          <Text numberOfLines={1}></Text>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{fontSize: 14, color: TextColor}}>New? </Text>
+            <Text style={{fontSize: 14, color: TextColor, textDecorationLine: 'underline'}} onPress={() => navigation.navigate('Signup')}>Sign up here.</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </LinearGradient>
   )
 }
 
 
 const styles = StyleSheet.create({
 
-  container: {
-    alignItems: 'center',
-    top: '8%'
-  },
-
-  title: {
-    fontSize: 50,
-    top: '70%',
-    position: 'absolute',
-    color: TitleColor,
-
-  },
-
-  text: {
-    top: '110%',
-  },
-
-  rectangle: {
-    width: screen.width / 1.25,
-    height: (screen.height / 10) * 8,
-    backgroundColor: "grey",
-    opacity: 0.4,
-    borderRadius: 50,
-    position: 'absolute'
-
+  background: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
   },
 
   image: {
-    top: '-19.6%',
-    left: '20%',
-    width: '80%',
-    height: '100%',
-    resizeMode: 'contain',
-    position: 'absolute'
+    flex: 3,
+    top: 5,
+    resizeMode: 'center',
   },
-
+  
   title_image: {
-    top: '-75%',
-    left: '-105%',
-    width: '300%',
-    height: '350%',
+    flex: 1/2,
+    top: '-2%',
     resizeMode: 'contain',
-    position: 'absolute'
   },
 
-  login: {
-    fontSize: 30,
-    color: 'black',
+  text: {
+    alignItems: 'center',
+    flex: 3
   },
+
 
   signup: {
-    color: 'black',
+    flex: 1,
+    color: TextColor,
     textDecorationLine: 'underline',
     fontSize: screen.height / 50
   },
 
   new: {
-    color: 'black',
+    color: TextColor,
     fontSize: screen.height / 50
   },
 
   textBox: {
-    height: 30, width: 250, backgroundColor: 'white',
-    paddingLeft: 10
+    height: 40, width: 250, backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
+    paddingLeft: 10, borderRadius: 20, color: TextColor, fontSize: 20, textAlign: 'center'
+  },
+
+  button: {
+    borderRadius: 20,
+    width: 150,
+    height: 40,
+    alignItems: 'center'
+  },
+
+  gradient: {
+    borderRadius: 20,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center'
+  },
+
+  name: {
+    fontSize: 30,
+    color: TextColor,
+    paddingBottom: 20
   },
 });
 
