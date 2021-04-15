@@ -35,6 +35,7 @@ const SignupActivity = ({ navigation }) => {
         })
         .catch(function (error) {
           // handle error
+          alert(last);
           alert(error);
         });
     };

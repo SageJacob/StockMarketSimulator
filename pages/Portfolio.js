@@ -75,7 +75,6 @@ const StockCard = () => {
   )
 }
 const Portfolio = ({ navigation }) => {
-
   React.useEffect(() => {
 
     const postCall = navigation.addListener('focus', () => {
