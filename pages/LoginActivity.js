@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   reset_confirm: {
     backgroundColor: 'white',
     height: (screen.height / 10) * 1.5,
-    top: '30%',
+    top: '0%',
     borderRadius: 20,
   },
 

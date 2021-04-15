@@ -2,20 +2,18 @@ import React, {useState} from 'react';
 import { Text, View, Button, TextInput, StyleSheet, 
           Dimensions, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const screen = Dimensions.get("screen");
 const backColor       =   'white';
 const textBoxColor    =   'white';
-const textColor       =   'black';
+const textColor       =   'silver';
 const titleColor      =   '#142949';
 const buttonColor     =   '#84ba5b';
 const buttonText      =   'white';
-const rectangleColor  =   'grey';
-const registerColor   =   'black';
+const registerColor   =   'silver';
+const TextColor = 'silver';
 
-const Rectangle = () => {
-  return <View style={styles.rectangle} />;
-};
 
 
 const SignupActivity = ({ navigation }) => {
@@ -57,7 +55,7 @@ const SignupActivity = ({ navigation }) => {
         <TextInput
           style={styles.textBox}
           placeholder={placeholders[i]}
-          placeholderTextColor='black'
+          placeholderTextColor={TextColor}
           onChangeText={arr2[i]}
           value={arr1[i]}
         />
@@ -66,15 +64,15 @@ const SignupActivity = ({ navigation }) => {
       );
 
     return (
+      <LinearGradient
+          colors={['rgba(  0, 92, 222   ,0.9)', 'rgba(  0, 0, 0 ,0.9)']}
+          style={styles.container}>
       <View
         style={styles.container}>
-            <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
-            <Rectangle></Rectangle>
+          <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
 
           <View style={styles.elements}>
-            <Text
-              style={styles.login}>Register</Text>
-            <Text numberOfLines={3}></Text>
+
 
             {components}
 
@@ -93,6 +91,7 @@ const SignupActivity = ({ navigation }) => {
             </View>
           </View>
       </View>
+      </LinearGradient>
     );
   }
 
@@ -101,14 +100,7 @@ const SignupActivity = ({ navigation }) => {
       flex: 1, alignItems: "center",
     },
     elements: {
-      top: '25%'
-    },
-    rectangle: {
-      width: screen.width / 1.25,
-      height: screen.height / 1.25,
-      backgroundColor: rectangleColor,
-      opacity: 0.4, top: '7%',
-      borderRadius: 50, position: 'absolute'
+      top: '10%'
     },
     title: {
       top: '15%', fontSize: 50, color: titleColor
@@ -117,16 +109,13 @@ const SignupActivity = ({ navigation }) => {
       fontSize: 30, color: registerColor,
     },
     textBox: {
-      height: 30, width: 250, backgroundColor: textBoxColor, 
-      alignContent: 'center', paddingLeft: 10
+      height: 40, width: 250, backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
+      paddingLeft: 10, borderRadius: 20, color: TextColor, fontSize: 20, textAlign: 'center'
     },
     title_image: {
-      top: '-107%',
-      left: '-55%',
-      width: '200%',
-      height: '255%',
+      flex: 1/3,
+      top: '10%',
       resizeMode: 'contain',
-      position: 'absolute'
     },
     create: {
       backgroundColor: buttonColor, borderRadius: 5,
@@ -137,13 +126,13 @@ const SignupActivity = ({ navigation }) => {
       color: buttonText, top: 2
     },
     signup: {
-      color: 'black',
+      color: 'silver',
       textDecorationLine: 'underline',
       fontSize: screen.height / 50
     },
 
     new: {
-      color: 'black',
+      color: 'silver',
       fontSize: screen.height / 50
     },
   });

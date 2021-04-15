@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, TextInput, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { Text, StyleSheet, View, TextInput, FlatList, TouchableOpacity, Button, Dimensions} from 'react-native';
 import { Card } from 'react-native-paper';
 import axios from 'axios';
 import { global_user } from './LoginActivity';
-
-
+import Modal from 'react-native-modal';
+const screen = Dimensions.get("screen");
 const SearchBar = () => {
   const postCall = () => {
     axios
@@ -105,8 +105,12 @@ const DATA = [
 ]
 
 const ListCard = ({ company }) => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   return (
-    <TouchableOpacity onPress={() => alert('pressed')}>
+    <TouchableOpacity onPress={toggleModal}>
       <View style={styles.cardContainer}>
         <View style={{ alignItems: 'flex-start' }}>
           <Text style={{ color: 'blue', fontSize: 25 }}>{company.name}</Text>
@@ -117,6 +121,17 @@ const ListCard = ({ company }) => {
           <Text style={{ color: 'red', fontSize: 12 }}>{company.change}%</Text>
         </View>
       </View>
+      <View >
+          <Modal isVisible={isModalVisible}>
+            <View>
+              <View style={styles.companyModal}>
+                <Text>{company.name}</Text>
+                <Button  title="Yes, reset balance"/>
+                <Button onPress={toggleModal}  title="No"/>
+              </View>
+            </View>
+          </Modal>
+        </View>
     </TouchableOpacity>
   )
 }
@@ -128,7 +143,7 @@ const Portfolio = ({ navigation }) => {
     const postCall = navigation.addListener('focus', () => {
       axios
         .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-          "Login": global_user
+          "Login": "Jacob"
         })
         .then(function (response) {
           let res = response.data;
@@ -194,7 +209,12 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     padding: 10,
     margin: 10,
-  }
+  },
+  companyModal:{
+    backgroundColor: 'white',
+    height: (screen.height / 10) * 3,
+
+  },
 });
 
 export default Portfolio;
