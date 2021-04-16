@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, TextInput, FlatList, TouchableOpacity, Button, Dimensions} from 'react-native';
+import { Text, StyleSheet, View, TextInput, FlatList, TouchableOpacity, Button, Dimensions } from 'react-native';
+import { VictoryCandlestick, VictoryChart } from 'victory-native';
 import { Card } from 'react-native-paper';
 import axios from 'axios';
 import { global_user } from './LoginActivity';
 import Modal from 'react-native-modal';
+
 const screen = Dimensions.get("screen");
+
 const SearchBar = () => {
-  const postCall = () => {
+  const search = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/stock/search', {
         "Query": query
@@ -30,7 +33,7 @@ const SearchBar = () => {
         style={styles.search}
         onChangeText={onChangeQuery}
         value={query}
-        onSubmitEditing={postCall}
+        onSubmitEditing={search}
       />
     </View>
   )
@@ -49,7 +52,7 @@ const StockList = () => {
 
 const DATA = [
   {
-    name: 'AMZ',
+    name: 'FB',
     shares: '3',
     price: '3,067.53',
     change: '-0.27',
@@ -109,8 +112,81 @@ const ListCard = ({ company }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const [chartData, setChartData] = useState({});
+  const [open, setOpen] = useState([]);
+  const [close, setClose] = useState([]);
+  const [low, setLow] = useState([]);
+  const [high, setHigh] = useState([]);
+  const [time, setTime] = useState([]);
+
+  const getChart = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/stock/getChart', {
+        "Company": company.name
+      })
+      .then(function (response) {
+        let res = response.data;
+
+        setChartData(res);
+        setOpen(res.o);
+        setClose(res.c);
+        setLow(res.l);
+        setHigh(res.h);
+        setTime(res.t);
+        console.log(chartData);
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  };
+
+
+  // const unixTime = time[0];
+  // const date = new Date(unixTime * 1000);
+  // alert(date.toLocaleDateString("en-US"));
+
+  let [buyAmount, setBuyAmount] = React.useState(null);
+
+  const buyStock = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/buyStock', {
+        "Login": "kdev",
+        "Company": company.name,
+        "Amount": buyAmount,
+        "Price": company.price
+      })
+      .then(function (response) {
+        let res = response.data;
+        alert(JSON.stringify(res));
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  };
+
+  let [sellAmount, setSellAmount] = React.useState(null);
+
+  const sellStock = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
+        "Login": "kdev",
+        "Company": company.name,
+        "Amount": sellAmount,
+        "Price": company.price
+      })
+      .then(function (response) {
+        let res = response.data;
+        alert(JSON.stringify(res));
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  };
+
+
   return (
-    <TouchableOpacity onPress={toggleModal}>
+    <TouchableOpacity onPress={() => { toggleModal(); getChart(); }}>
       <View style={styles.cardContainer}>
         <View style={{ alignItems: 'flex-start' }}>
           <Text style={{ color: 'blue', fontSize: 25 }}>{company.name}</Text>
@@ -122,16 +198,42 @@ const ListCard = ({ company }) => {
         </View>
       </View>
       <View >
-          <Modal isVisible={isModalVisible}>
-            <View>
-              <View style={styles.companyModal}>
-                <Text>{company.name}</Text>
-                <Button  title="Yes, reset balance"/>
-                <Button onPress={toggleModal}  title="No"/>
-              </View>
+        <Modal isVisible={isModalVisible}>
+          <View>
+            <View style={styles.companyModal}>
+              <Text style={{ color: 'blue', fontSize: 35 }}>{company.name}</Text>
+              <VictoryChart>
+                {/* <VictoryCandlestick
+                data={chartData}
+                x={time}
+                open={open}
+                close={close}
+                high={high}
+                low={low}
+                /> */}
+              </VictoryChart>
+              <Text>Owned: 1</Text>
+              <TextInput
+                style={{ borderWidth: 1, width: 50 }}
+                placeholder="Buy"
+                textAlign='center'
+                onChangeText={setBuyAmount}
+                value={buyAmount}
+                onSubmitEditing={buyStock}
+              />
+              <TextInput
+                style={{ borderWidth: 1, width: 50 }}
+                placeholder="Sell"
+                textAlign='center'
+                onChangeText={setSellAmount}
+                value={sellAmount}
+                onSubmitEditing={sellStock}
+              />
+              <Button onPress={toggleModal} title="Close" />
             </View>
-          </Modal>
-        </View>
+          </View>
+        </Modal>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -143,7 +245,7 @@ const Portfolio = ({ navigation }) => {
     const postCall = navigation.addListener('focus', () => {
       axios
         .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-          "Login": "Jacob"
+          "Login": global_user
         })
         .then(function (response) {
           let res = response.data;
@@ -210,10 +312,11 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
-  companyModal:{
+  companyModal: {
     backgroundColor: 'white',
-    height: (screen.height / 10) * 3,
-
+    height: (screen.height / 10) * 7,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
   },
 });
 
