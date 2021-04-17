@@ -12,7 +12,7 @@ const titleColor      =   '#142949';
 const buttonColor     =   '#84ba5b';
 const buttonText      =   'white';
 const registerColor   =   'silver';
-const TextColor = 'silver';
+const TextColor = 'white';
 
 
 
@@ -33,8 +33,7 @@ const SignupActivity = ({ navigation }) => {
         })
         .catch(function (error) {
           // handle error
-          alert(last);
-          alert(error);
+          alert('There was an error.');
         });
     };
     let [first, onChangeFirst] = React.useState(null);
@@ -55,7 +54,7 @@ const SignupActivity = ({ navigation }) => {
         <TextInput
           style={styles.textBox}
           placeholder={placeholders[i]}
-          placeholderTextColor={TextColor}
+          placeholderTextColor={'silver'}
           onChangeText={arr2[i]}
           value={arr1[i]}
         />
@@ -69,7 +68,7 @@ const SignupActivity = ({ navigation }) => {
           style={styles.container}>
       <View
         style={styles.container}>
-          <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
+          <Image style={styles.title_image} source={require('../assets/title.png')}></Image>
 
           <View style={styles.elements}>
 
@@ -100,7 +99,8 @@ const SignupActivity = ({ navigation }) => {
       flex: 1, alignItems: "center",
     },
     elements: {
-      top: '10%'
+      top: '10%',
+      alignItems: 'center'
     },
     title: {
       top: '15%', fontSize: 50, color: titleColor
@@ -118,12 +118,14 @@ const SignupActivity = ({ navigation }) => {
       resizeMode: 'contain',
     },
     create: {
-      backgroundColor: buttonColor, borderRadius: 5,
-      height: 30, width: 250, alignItems: "center",
+      borderRadius: 20,
+      width: 150,
+      height: 40,
+      alignItems: 'center',
+      backgroundColor: 'rgb(24,104,217)'
     },
     btnText: {
-      fontSize: screen.height / 50,
-      color: buttonText, top: 2
+      color: 'silver', top: 7, fontSize: 18, left: -3
     },
     signup: {
       color: 'silver',
