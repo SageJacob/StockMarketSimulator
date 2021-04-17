@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import { Text, StyleSheet, View, TextInput,
-  TouchableOpacity, Button, Dimensions } from 'react-native';
+  TouchableOpacity, Button, Dimensions, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import axios from 'axios';
 import { global_user } from './LoginActivity';
+import { LinearGradient } from 'expo-linear-gradient';
 let backgroundColor = '#f1eff1';
 let textColor = 'black';
 let underline = 'black';
+let TextColor = 'white';
 const screen = Dimensions.get("screen");
 
 let email = '';
@@ -44,7 +46,7 @@ const Account = ({ navigation }) => {
         "Email": email
       })
       .then(function (response) {
-        toggleModal();
+        togglePasswordModal();
       })
       .catch(function (error) {
         // handle error
@@ -52,46 +54,67 @@ const Account = ({ navigation }) => {
       });
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.list}>
-        <TouchableOpacity style={styles.buttons} onPress={toggleModal}>
-            <Text style={styles.btnText}> Reset Balance</Text>
-        </TouchableOpacity>
-        <View >
-          <Modal isVisible={isModalVisible}>
-            <View style={styles.reset_confirm}>
-              <Text style={{fontSize: 25, width: '90%', left: '5%',}}>Are you sure you want to reset your balance? Your old portfolio has been deleted and your balance will reset to $10,000</Text>
-              <View style={styles.arrange}>
-                <Button onPress={ResetBalCall} title="Yes, reset balance"/>
-                <Button onPress={toggleModal}  title="No"/>
+    <LinearGradient
+          colors={['rgba(  0, 92, 222   ,0.9)', 'rgba(  0, 0, 0 ,0.9)']}
+          style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.list}>
+          <TouchableOpacity style={styles.buttons} onPress={toggleModal}>
+              <Text style={styles.btnText}> Reset Balance</Text>
+          </TouchableOpacity>
+
+          <View >
+            <Modal isVisible={isModalVisible}>
+              <View style={styles.reset_confirm}>
+                <View style={styles.ModalLocation}>
+                  <Text style={styles.ModalResetText}>Are you sure you want to reset your balance? Your current portfolio will be deleted and your balance will reset to $10,000</Text>
+                  <View style={styles.arrange}>
+                    <TouchableOpacity style={styles.ModalButton} onPress={ResetBalCall}>
+                      <Text style={{color: TextColor, fontSize: 25, top: 2}}>submit</Text>
+                    </TouchableOpacity>
+                    <Text style={{color: 'rgb(92,92,92)', paddingRight: 20} }>.</Text>
+                    <TouchableOpacity style={styles.ModalButton} onPress={toggleModal}>
+                      <Text style={{color: TextColor, fontSize: 25, top: 2}}>cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Image style={styles.ModalImage} source={require('../assets/logo.png')}></Image>
               </View>
-            </View>
-          </Modal>
-        </View>
-        <TouchableOpacity style={styles.buttons} onPress={togglePasswordModal}>
-            <Text style={styles.btnText}> Change Password</Text>
-        </TouchableOpacity>
-        <View >
-          <Modal isVisible={passwordModal}>
-            <View style={styles.reset_confirm}>
-              <Text style={{fontSize: 25, width: '90%', left: '5%',}}>Please enter your email address to change your password.</Text>
-              <View style={styles.arrange}>
-              <TextInput
-                style={styles.textBox}
-                placeholder="Enter password"
-                placeholderTextColor='silver'
-                onChangeText={handleEmail} />
-              <Button onPress={ResetPassCall} title="submit"/>
-              <Button onPress={togglePasswordModal}title="close"/>
+            </Modal>
+          </View>
+          <TouchableOpacity style={styles.buttons} onPress={togglePasswordModal}>
+              <Text style={styles.btnText}> Change Password</Text>
+          </TouchableOpacity>
+          <View >
+            <Modal isVisible={passwordModal}>
+              <View style={styles.reset_confirm}>
+                <View style={styles.ModalLocation}>
+                  <Text style={styles.ModalText}>Please enter your email address.</Text>
+                  <TextInput
+                    style={styles.modalTextBox}
+                    placeholder="Enter email"
+                    placeholderTextColor='silver'
+                    onChangeText={handleEmail} />
+                  <View style={styles.arrange}>
+                    <TouchableOpacity style={styles.ModalButton} onPress={ResetPassCall}>
+                      <Text style={{color: TextColor, fontSize: 25, top: 2}}>submit</Text>
+                    </TouchableOpacity>
+                    <Text style={{color: 'rgb(92,92,92)', paddingRight: 20} }>.</Text>
+                    <TouchableOpacity style={styles.ModalButton} onPress={togglePasswordModal}>
+                      <Text style={{color: TextColor, fontSize: 25, top: 2}}>cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Image style={styles.ModalImage} source={require('../assets/logo.png')}></Image>
               </View>
-            </View>
-          </Modal>
+            </Modal>
+          </View>
+          <TouchableOpacity style={styles.buttons}>
+              <Text style={styles.btnText} onPress={()=>navigation.navigate('Login')}> Sign out</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.buttons}>
-            <Text style={styles.btnText} onPress={()=>navigation.navigate('Login')}> Sign out</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   )
 }
 
@@ -100,7 +123,6 @@ const styles = StyleSheet.create({
 
   container: { 
     alignContent: 'center',
-    backgroundColor: backgroundColor,
     height: '100%'
   },
   list: {
@@ -144,7 +166,41 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     paddingTop: '5%'
   },
+  reset_confirm: {
+    backgroundColor: 'rgb(92,92,92)', height: (screen.height / 10) * 5, borderRadius: 10,
+  },
 
+  modalTextBox: {
+    height: '17%', width: '90%', backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
+    paddingLeft: 10, borderRadius: 20, color: 'white', fontSize: 20, textAlign: 'center',
+  },
 
+  ModalLocation: {
+    top: 10, alignItems: 'center',
+  },
+
+  ModalText: {
+    fontSize: 30, width: '80%', color: 'white', paddingBottom:'15%'
+  },
+
+  ModalButton: {
+    backgroundColor: 'rgb(24,104,217)',
+    borderRadius: 20,
+    width: '40%',
+    height: '125%',
+    top: 20,
+    alignItems:'center',
+  },
+
+  ModalImage: {
+    height: '15%',
+    width: '10%',
+    left: '44%',
+    top: '17%'
+  },
+
+  ModalResetText: {
+    fontSize: 25, width: '80%', color: 'white'
+  },
 
 });

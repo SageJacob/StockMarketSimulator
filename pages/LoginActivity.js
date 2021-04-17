@@ -10,7 +10,7 @@ import Modal from 'react-native-modal';
 const screen = Dimensions.get("screen");
 const LoginButton = '#84ba5b';
 const TitleColor = '#142949';
-const TextColor = 'silver';
+const TextColor = 'white';
 let global_user = '';
 
 const Rectangle = () => {
@@ -52,7 +52,7 @@ const LoginActivity = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error.');
       });
   };
   const ResetPassCall = () => {
@@ -65,7 +65,7 @@ const LoginActivity = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error.');
       });
   };
 
@@ -74,10 +74,11 @@ const LoginActivity = ({ navigation }) => {
 
       <LinearGradient
           colors={['rgba(  0, 92, 222   ,0.9)', 'rgba(  0, 0, 0 ,0.9)']}
+
           style={styles.background}>
-      <View style={{flex: 1, alignItems: 'center', alignContent: 'center'}}>
-        <Image style={styles.image} source={require('../assets/astronaut.png')}></Image>
-        <Image style={styles.title_image} source={require('../assets/oof3.png')}></Image>
+      <View style={{flex: 1, alignItems: 'center', alignContent: 'center', top: '10%'}}>
+        <Image style={styles.image} source={require('../assets/logo.png')}></Image>
+        <Image style={styles.title_image} source={require('../assets/title.png')}></Image>
         <View style={styles.text}>
 
           <TextInput
@@ -103,27 +104,31 @@ const LoginActivity = ({ navigation }) => {
           <View >
           <Modal isVisible={passwordModal}>
             <View style={styles.reset_confirm}>
-              <Text style={{fontSize: 21, width: '90%', left: '5%', top: 5}}>Please enter your email address.</Text>
-              <View style={styles.arrange}>
-              <TextInput
-                style={styles.modalTextBox}
-                placeholder="Enter email"
-                placeholderTextColor='silver'
-                onChangeText={handleEmail} />
-              <Button onPress={ResetPassCall} title="submit"/>
-              <Button onPress={togglePasswordModal}title="close"/>
+              <View style={styles.ModalLocation}>
+                <Text style={styles.ModalText}>Please enter your email address.</Text>
+                <TextInput
+                  style={styles.modalTextBox}
+                  placeholder="Enter email"
+                  placeholderTextColor='silver'
+                  onChangeText={handleEmail} />
+                <View style={styles.arrange}>
+                  <TouchableOpacity style={styles.ModalButton} onPress={ResetPassCall}>
+                    <Text style={{color: TextColor, fontSize: 25, top: 2}}>submit</Text>
+                  </TouchableOpacity>
+                  <Text style={{color: 'rgb(92,92,92)', paddingRight: 20} }>.</Text>
+                  <TouchableOpacity style={styles.ModalButton} onPress={togglePasswordModal}>
+                    <Text style={{color: TextColor, fontSize: 25, top: 2}}>cancel</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
+              <Image style={styles.ModalImage} source={require('../assets/logo.png')}></Image>
             </View>
           </Modal>
         </View>
 
           <Text numberOfLines={1}></Text>
           <TouchableOpacity style={styles.button} onPress={postCall}>
-          <LinearGradient
-                colors={['rgba(22,48,79,0.8)', 'rgba(61,152,172,0.8)']}
-                style={styles.gradient}>
               <Text style={{color: TextColor, top: 3, fontSize: 25}}>Log in</Text>
-          </LinearGradient>
           </TouchableOpacity>
 
           <Text numberOfLines={1}></Text>
@@ -148,33 +153,28 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    flex: 3,
-    top: 5,
+    flex: 1.75,
+
     resizeMode: 'center',
   },
   
   title_image: {
     flex: 1/2,
-    top: '-2%',
+    top: '0%',
     resizeMode: 'contain',
   },
 
   text: {
-    alignItems: 'center',
-    flex: 3
+    alignItems: 'center', flex: 3, top: '0%'
   },
 
 
   signup: {
-    flex: 1,
-    color: TextColor,
-    textDecorationLine: 'underline',
-    fontSize: screen.height / 50
+    flex: 1, color: TextColor, textDecorationLine: 'underline', fontSize: screen.height / 50
   },
 
   new: {
-    color: TextColor,
-    fontSize: screen.height / 50
+    color: TextColor, fontSize: screen.height / 50
   },
 
   textBox: {
@@ -183,52 +183,59 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    borderRadius: 20,
-    width: 150,
-    height: 40,
-    alignItems: 'center'
+    borderRadius: 20, width: 150, height: 40, alignItems: 'center', backgroundColor: 'rgb(24,104,217)'
   },
 
   gradient: {
-    borderRadius: 20,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center'
+    borderRadius: 20, width: '100%', height: '100%', alignItems: 'center'
   },
 
   resetPass: {
-    height: '100%',
-    backgroundColor: 'white'
+    height: '100%', backgroundColor: 'white'
+  },
+  
+  reset_button: {
+    width: '40%', height: '120%', alignItems: 'center', backgroundColor: '#43B1D3',
+  },
+  
+  reset_button_text: {
+    fontSize: 30, color: 'black', paddingTop: 4
+  },
+  
+  arrange: {
+    flexDirection: 'row', width: '100%', justifyContent: 'center', top: 20
   },
   reset_confirm: {
-    backgroundColor: 'white',
-    height: (screen.height / 10) * 1.5,
-    top: '0%',
-    borderRadius: 20,
-  },
-
-  reset_button: {
-    width: '40%',
-    height: '120%',
-    alignItems: 'center',
-    backgroundColor: '#43B1D3',
-  },
-
-  reset_button_text: {
-    fontSize: 30,
-    color: 'black',
-    paddingTop: 4
-  },
-
-  arrange: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingTop: '5%'
+    backgroundColor: 'rgb(92,92,92)', height: (screen.height / 10) * 5, borderRadius: 10,
   },
 
   modalTextBox: {
-    height: 40, width: 200, backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
-    paddingLeft: 10, borderRadius: 20, color: TextColor, fontSize: 20, textAlign: 'center'
+    height: '17%', width: '90%', backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
+    paddingLeft: 10, borderRadius: 20, color: 'white', fontSize: 20, textAlign: 'center',
+  },
+
+  ModalLocation: {
+    top: 10, alignItems: 'center',
+  },
+
+  ModalText: {
+    fontSize: 30, width: '80%', color: 'white', paddingBottom:'15%'
+  },
+
+  ModalButton: {
+    backgroundColor: 'rgb(24,104,217)',
+    borderRadius: 20,
+    width: '40%',
+    height: '125%',
+    top: 20,
+    alignItems:'center',
+  },
+
+  ModalImage: {
+    height: '15%',
+    width: '10%',
+    left: '44%',
+    top: '17%'
   },
 
 });
