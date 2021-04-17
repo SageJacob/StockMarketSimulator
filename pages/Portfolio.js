@@ -120,21 +120,47 @@ const ListCard = ({ company }) => {
   const [high, setHigh] = useState([]);
   const [time, setTime] = useState([]);
 
+
+  const [graph, setGraph] = useState([]);
+  // var arr = [];
+
   const getChart = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/stock/getChart', {
         "Company": company.name
       })
       .then(function (response) {
-        let res = response.data;
+        // let res = response.data;
 
-        setChartData(res);
-        setOpen(res.o);
-        setClose(res.c);
-        setLow(res.l);
-        setHigh(res.h);
-        setTime(res.t);
-        console.log(chartData);
+        // arr = [];
+
+        // for (var i = 0; i < )
+
+        // setChartData(res);
+        // setOpen(res.o);
+        // setClose(res.c);
+        // setLow(res.l);
+        // setHigh(res.h);
+        // setTime(res.t);
+        // console.log(chartData);
+
+
+        // {x: new Date(2016, 6, 1), open: 5, close: 10, high: 15, low: 0}
+
+        var res = response.data;
+        console.log(res);
+        var dataGraph = [];
+        for (var i = 0; i < res.c.length; i++) {
+          var temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+
+          dataGraph.push(temp);
+        }
+
+        setGraph(dataGraph);
+
+        //storage.storeToken(res);
+        //window.location.href = '/cards'
+
       })
       .catch(function (error) {
         alert(error);
@@ -203,14 +229,9 @@ const ListCard = ({ company }) => {
             <View style={styles.companyModal}>
               <Text style={{ color: 'blue', fontSize: 35 }}>{company.name}</Text>
               <VictoryChart>
-                {/* <VictoryCandlestick
-                data={chartData}
-                x={time}
-                open={open}
-                close={close}
-                high={high}
-                low={low}
-                /> */}
+                <VictoryCandlestick
+                  data={graph}
+                />
               </VictoryChart>
               <Text>Owned: 1</Text>
               <TextInput
