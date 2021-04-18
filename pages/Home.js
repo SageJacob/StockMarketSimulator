@@ -17,46 +17,6 @@ const Tabs = createMaterialTopTabNavigator();
 
 const MoneyInvested = (money) => {
 
-  // const [cashBalance, setCashBalance] = useState([]);
-  // const [holdings, setHoldings] = useState([]);
-
-
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   axios
-  //     .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-  //       // remember to use global_user  
-  //       "Login": global_user
-  //     })
-  //     .then(function (response) {
-  //       let res = response.data;
-  //       setCashBalance(res.Cash.toFixed(2));
-  //       setHoldings(res.Holdings.toFixed(2));
-  //     })
-  //     .catch(function (error) {
-  //       alert(error);
-  //     });
-  // }, []);
-=======
-  useEffect(() => {
-
-    axios
-      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-        // remember to use global_user  
-        "Login": global_user
-      })
-      .then(function (response) {
-        let res = response.data;
-        setCashBalance(res.Cash.toFixed(2));
-        setHoldings(res.Holdings.toFixed(2));
-      })
-      .catch(function (error) {
-        alert('error in home');
-      });
-  }, []);
->>>>>>> b60de0a7511281a3d2c6b9c6cfb60721abd72d96
-
-
   return (
     <View style={styles.header}>
       <Text style={{ color: 'blue', fontSize: 25 }}>Welcome, {global_user}</Text>
@@ -114,42 +74,6 @@ const MoneyInvested = (money) => {
 //   )
 // }
 
-const TimeIntervals = () => {
-
-  const [selectedButton, setSelectedButton] = useState('');
-
-  const toggleSelectedButton = (selection) => {
-    console.log('button before: ' + selectedButton);
-    setSelectedButton(selection);
-    console.log('button after: ' + selectedButton);
-  }
-
-  return (
-    <View style={styles.intervals}>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('day')}>
-        <View>
-          <Text style={{ color: 'white' }}>1D</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('week')}>
-        <View>
-          <Text style={{ color: 'white' }}>1W</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('month')}>
-        <View>
-          <Text style={{ color: 'white' }}>1M</Text>
-        </View>
-      </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('year')}>
-        <View>
-          <Text style={{ color: 'white' }}>1Y</Text>
-        </View>
-      </TouchableHighlight>
-    </View>
-  )
-}
-
 const HomeScreen = ({ navigation }) => {
   const [cashBalance, setCashBalance] = useState([]);
   const [holdings, setHoldings] = useState([]);
@@ -187,8 +111,8 @@ const HomeScreen = ({ navigation }) => {
 function Home() {
   return (
     <Tabs.Navigator
-      initialRouteName="Login"
-      tabBarOptions={{ labelStyle: { fontSize: 9 } }}
+      initialRouteName="Home"
+      tabBarOptions={{ labelStyle: { fontSize: 8 } }}
     >
       <Tabs.Screen name="Leaderboard" component={LeaderBoard} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />
@@ -202,7 +126,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#8C8C8C',
-    height: screen.height
+    height: screen.height,
+    marginBottom: 10
   },
 
   header: {
