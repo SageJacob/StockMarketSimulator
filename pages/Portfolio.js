@@ -11,14 +11,22 @@ const screen = Dimensions.get("screen");
 let list;
 let portfolio = {StocksOwned:""};
 
-
 const ListSearchCard = ({ company }) => {
   const [isSearchStockModalVisible, setSearchStockModalVisible] = useState(false);
   const toggleSearchStockModal = () => {
     setSearchStockModalVisible(!isSearchStockModalVisible);
   };
-  let [buyAmount, setBuyAmount] = React.useState(null);
   const [graphBuy, setGraphBuy] = useState([]);
+  let buyAmount = '';
+  let sellAmount = '';
+
+  const handleBuy = (text) => {
+  buyAmount = text;
+  }
+
+  const handleSell = (text) => {
+  sellAmount = text;
+  }
 
   const getGraphChart = () => {
     axios
@@ -47,11 +55,12 @@ const ListSearchCard = ({ company }) => {
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/buyStock', {
         "Login": global_user,
         "Company": company.Company,
-        "Amount": buyAmount,
-        "Price": company.Company.c
+        "Amount": parseInt(buyAmount),
       })
       .then(function (response) {
         let res = response.data;
+        buyAmount = '';
+        toggleSearchStockModal();
         alert(JSON.stringify(res));
       })
       .catch(function (error) {
@@ -59,18 +68,17 @@ const ListSearchCard = ({ company }) => {
       });
   };
 
-  let [sellAmount, setSellAmount] = React.useState(null);
-
   const sellStock = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
         "Login": global_user,
-        "Company": company.name,
-        "Amount": sellAmount,
-        "Price": company.price
+        "Company": company.Company,
+        "Amount": parseInt(sellAmount),
       })
       .then(function (response) {
         let res = response.data;
+        sellAmount = '';
+        toggleSearchStockModal();
         alert(JSON.stringify(res));
       })
       .catch(function (error) {
@@ -90,38 +98,43 @@ const ListSearchCard = ({ company }) => {
       <View >
         <Modal isVisible={isSearchStockModalVisible}>
             <View style={styles.companySearchModal}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', top: 5}}>
                 <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
-                <Text style={{color: 'black'}}> - </Text>
-                <Text style={{color: 'black'}}>$ {company.Quote.c}</Text>
+                <Text style={{color: 'black', fontSize: 35 }}> - </Text>
+                <Text style={{color: 'black', fontSize: 35 }}>${company.Quote.c}</Text>
               </View>
+              <View style={{left: '4%'}}>
               <VictoryChart>
                 <VictoryCandlestick
                     data={graphBuy}
+                    candleColors={{ positive: 'lime', negative: 'red' }}
                   />
               </VictoryChart>
-              <TextInput
-                style={{ borderWidth: 1, width: 50 }}
-                placeholder="Buy"
-                textAlign='center'
-                onChangeText={setBuyAmount}
-                value={buyAmount}/>
-              <TouchableOpacity styles={styles.BuySellClose} onPress={buyStock}>
-                <Text>Buy</Text>
-              </TouchableOpacity>
-              <TextInput
-                style={{ borderWidth: 1, width: 50 }}
-                placeholder="Sell"
-                textAlign='center'
-                onChangeText={setSellAmount}
-                value={sellAmount}>
-                
-              </TextInput>
-              <TouchableOpacity styles={styles.BuySellClose} onPress={sellStock}>
-                <Text>Sell</Text>
-              </TouchableOpacity>
-              <TouchableOpacity styles={styles.BuySellClose} onPress={toggleSearchStockModal}>
-                <Text>Close</Text>
+              </View>
+              <View style={{flexDirection: 'row', paddingBottom: '5%'}}>
+                <TextInput
+                  style={styles.buySellBox}
+                  placeholder="Buy"
+                  textAlign='center'
+                  onChangeText={handleBuy}/>
+                <TouchableOpacity style={styles.BuySellClose} onPress={buyStock}>
+                  <Text style={{color: 'white', fontSize: 20}}>Buy</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection: 'row',}}>
+                <TextInput
+                  style={styles.buySellBox}
+                  placeholder="Sell"
+                  textAlign='center'
+                  onChangeText={handleSell}>
+                  
+                </TextInput>
+                <TouchableOpacity style={styles.BuySellClose} onPress={sellStock}>
+                  <Text style={{color: 'white', fontSize: 20}}>Sell</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={styles.BuySellCloseSubmit} onPress={toggleSearchStockModal}>
+                <Text style={{color: 'white', fontSize: 20, top: -2}}>Close</Text>
               </TouchableOpacity>
             </View>
         </Modal>
@@ -227,6 +240,16 @@ const ListCard = ({ company }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  let buyAmount = '';
+  let sellAmount = '';
+
+  const handleBuy = (text) => {
+    buyAmount = text;
+  }
+
+  const handleSell = (text) => {
+    sellAmount = text;
+  }
 
   const [chartData, setChartData] = useState({});
   const [open, setOpen] = useState([]);
@@ -264,8 +287,6 @@ const ListCard = ({ company }) => {
   // const date = new Date(unixTime * 1000);
   // alert(date.toLocaleDateString("en-US"));
 
-  let [buyAmount, setBuyAmount] = React.useState(null);
-
   const buyStock = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/buyStock', {
@@ -275,16 +296,16 @@ const ListCard = ({ company }) => {
       })
       .then(function (response) {
         let res = response.data;
+        alert('You just purchased '+ buyAmount + ' stock(s)');
         buyAmount = '';
-        alert(JSON.stringify(res));
       })
       .catch(function (error) {
         alert(error);
       });
   };
 
-  let [sellAmount, setSellAmount] = React.useState(null);
   const sellStock = () => {
+    alert(sellAmount);
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
         "Login": global_user,
@@ -295,6 +316,7 @@ const ListCard = ({ company }) => {
         let res = response.data;
         sellAmount = '';
         alert(JSON.stringify(res));
+        
       })
       .catch(function (error) {
         alert(error);
@@ -319,33 +341,43 @@ const ListCard = ({ company }) => {
             <View style={styles.companyModal}>
               <View style={{flexDirection: 'row'}}>
                 <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
-                <Text style={{color: 'black'}}> - </Text>
-                <Text style={{color: 'black'}}>$ {parseFloat(company.StockValue).toFixed(2)}</Text>
+                <Text style={{color: 'black', fontSize: 35 }}> - </Text>
+                <Text style={{color: 'black', fontSize: 35 }}>${parseFloat(company.StockValue).toFixed(2)}</Text>
               </View>
+              <View style={{left: '4%'}}>
               <VictoryChart>
                 <VictoryCandlestick
                     data={graph}
+                    candleColors={{ positive: 'lime', negative: 'red' }}
                   />
               </VictoryChart>
-              <Text>Shares owned: {company.Amount}</Text>
-              <TextInput
-                style={{ borderWidth: 1, width: 50 }}
-                placeholder="Buy"
-                textAlign='center'
-                onChangeText={setBuyAmount}
-                value={buyAmount}
-                onSubmitEditing={buyStock}
-              />
-              <TextInput
-                style={{ borderWidth: 1, width: 50 }}
-                placeholder="Sell"
-                textAlign='center'
-                onChangeText={setSellAmount}
-                value={sellAmount}
-                onSubmitEditing={sellStock}>
-                
-              </TextInput>
-                <Button onPress={toggleModal} title="Close" />
+              </View>
+              <Text style={{top: -10}}>Shares owned: {company.Amount}</Text>
+              <View style={{flexDirection: 'row', paddingBottom: '5%', top: -5}}>
+                <TextInput
+                  style={styles.buySellBox}
+                  placeholder="Buy"
+                  textAlign='center'
+                  onChangeText={handleBuy}/>
+                <TouchableOpacity style={styles.BuySellClose} onPress={buyStock}>
+                  <Text style={{color: 'white', fontSize: 20, top: -2}}>Buy</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{flexDirection: 'row', top: -5}}>
+                <TextInput
+                  style={styles.buySellBox}
+                  placeholder="Sell"
+                  textAlign='center'
+                  onChangeText={handleSell}>
+                  
+                </TextInput>
+                <TouchableOpacity style={styles.BuySellClose} onPress={sellStock}>
+                  <Text style={{color: 'white', fontSize: 20, top: -2}}>Sell</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={styles.BuySellCloseOwnedSubmit} onPress={toggleModal}>
+                <Text style={{color: 'white', fontSize: 20, top: -2}}>Close</Text>
+              </TouchableOpacity>
             </View>
         </Modal>
       </View>
@@ -452,8 +484,34 @@ const styles = StyleSheet.create({
 
   BuySellClose: {
     backgroundColor: 'rgb(24,104,217)',
-    height: 50
+    alignItems: 'center',
+    borderRadius: 20,
+    width: '30%',
+    height: '90%',
+    left: '30%',
+    top: 2
   },
+  BuySellCloseSubmit: {
+    backgroundColor: 'rgb(24,104,217)',
+    width: '50%',
+    alignItems: 'center',
+    borderRadius: 20,
+    height: '5%',
+    top: '10%'
+  },
+
+  buySellBox: {
+    borderWidth: 1, width: (screen.width / 10) * 5, borderRadius: 20, left: '-25%', height: '100%',
+  },
+
+  BuySellCloseOwnedSubmit: {
+    backgroundColor: 'rgb(24,104,217)',
+    width: '50%',
+    alignItems: 'center',
+    borderRadius: 20,
+    height: '5%',
+  },
+
 });
 
 export default Portfolio;
