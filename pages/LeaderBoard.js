@@ -47,6 +47,7 @@ const LeaderBoard = ({ navigation }) => {
         <FlatList
           data={leaders}
           renderItem={({ item }) => <ListCard username={item.username} accBalance={item.accBalance} />}
+          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     </LinearGradient>

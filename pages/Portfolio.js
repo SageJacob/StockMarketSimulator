@@ -18,7 +18,30 @@ const ListSearchCard = ({ company }) => {
     setSearchStockModalVisible(!isSearchStockModalVisible);
   };
   let [buyAmount, setBuyAmount] = React.useState(null);
+  const [graphBuy, setGraphBuy] = useState([]);
 
+  const getGraphChart = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/stock/getChart', {
+        "Company": company.Company
+      })
+      .then(function (response) {
+        let res = response.data;
+        console.log(res);
+        let dataGraph = [];
+        for (var i = 0; i < res.c.length; i++) {
+          let temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+
+          dataGraph.push(temp);
+        }
+
+        setGraphBuy(dataGraph);
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  
+};
   const buyStock = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/buyStock', {
@@ -55,10 +78,10 @@ const ListSearchCard = ({ company }) => {
       });
   };
   return (
-    <TouchableOpacity onPress={toggleSearchStockModal}>
+    <TouchableOpacity onPress={()=>{getGraphChart(); toggleSearchStockModal();}}>
       <View style={styles.cardContainer}>
         <View style={{ alignItems: 'flex-start' }}>
-          <Text style={{ color: 'blue', fontSize: 25 }}>{company.Company}</Text>
+          <Text style={{ color: 'rgb(24,104,217)', fontSize: 25 }}>{company.Company}</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
           <Text style={{ color: 'green', fontSize: 25 }}>${company.Quote.c}</Text>
@@ -67,26 +90,39 @@ const ListSearchCard = ({ company }) => {
       <View >
         <Modal isVisible={isSearchStockModalVisible}>
             <View style={styles.companySearchModal}>
-              <Text style={{ color: 'blue', fontSize: 35 }}>{company.Company}</Text>
-              <Text>Owned: 1</Text>
-              <Button onPress={toggleSearchStockModal} title="Close" />
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
+                <Text style={{color: 'black'}}> - </Text>
+                <Text style={{color: 'black'}}>$ {company.Quote.c}</Text>
+              </View>
+              <VictoryChart>
+                <VictoryCandlestick
+                    data={graphBuy}
+                  />
+              </VictoryChart>
               <TextInput
                 style={{ borderWidth: 1, width: 50 }}
                 placeholder="Buy"
                 textAlign='center'
                 onChangeText={setBuyAmount}
-                value={buyAmount}
-                onSubmitEditing={buyStock}
-              />
+                value={buyAmount}/>
+              <TouchableOpacity styles={styles.BuySellClose} onPress={buyStock}>
+                <Text>Buy</Text>
+              </TouchableOpacity>
               <TextInput
                 style={{ borderWidth: 1, width: 50 }}
                 placeholder="Sell"
                 textAlign='center'
                 onChangeText={setSellAmount}
-                value={sellAmount}
-                onSubmitEditing={sellStock}>
+                value={sellAmount}>
                 
               </TextInput>
+              <TouchableOpacity styles={styles.BuySellClose} onPress={sellStock}>
+                <Text>Sell</Text>
+              </TouchableOpacity>
+              <TouchableOpacity styles={styles.BuySellClose} onPress={toggleSearchStockModal}>
+                <Text>Close</Text>
+              </TouchableOpacity>
             </View>
         </Modal>
       </View>
@@ -155,7 +191,9 @@ const Portfolio = ({ navigation }) => {
             style={styles.search}
             onChangeText={onChangeQuery}
           />
-        <Button title='here' onPress={()=>{search();}}/>
+        <TouchableOpacity style={styles.searchBarButton}onPress={()=>{search();}}>
+          <Text style={{ color: 'white', fontSize: 20 }}>Search</Text>
+        </TouchableOpacity>
         </View>
         <View style={styles.listContainer}>
           <FlatList
@@ -175,7 +213,7 @@ const Portfolio = ({ navigation }) => {
 
             <TouchableOpacity style={styles.searchButton} title='close' onPress={()=>{toggleSearch();}}>
               <Text
-                style={{color: 'white', top: '10%', fontSize: 20}}>Close</Text>
+                style={{color: 'white', top: '5%', fontSize: 20}}>Close</Text>
             </TouchableOpacity>
             </View>
           </Modal>
@@ -237,6 +275,7 @@ const ListCard = ({ company }) => {
       })
       .then(function (response) {
         let res = response.data;
+        buyAmount = '';
         alert(JSON.stringify(res));
       })
       .catch(function (error) {
@@ -245,7 +284,6 @@ const ListCard = ({ company }) => {
   };
 
   let [sellAmount, setSellAmount] = React.useState(null);
-
   const sellStock = () => {
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
@@ -255,6 +293,7 @@ const ListCard = ({ company }) => {
       })
       .then(function (response) {
         let res = response.data;
+        sellAmount = '';
         alert(JSON.stringify(res));
       })
       .catch(function (error) {
@@ -267,18 +306,22 @@ const ListCard = ({ company }) => {
     <TouchableOpacity onPress={() => { toggleModal(); getChart(); }}>
       <View style={styles.cardContainer}>
         <View style={{ alignItems: 'flex-start' }}>
-          <Text style={{ color: 'blue', fontSize: 25 }}>{company.Company}</Text>
+          <Text style={{ color: 'rgb(24,104,217)', fontSize: 25 }}>{company.Company}</Text>
           <Text style={{ color: 'black', fontSize: 12 }}>{company.Amount} Shares</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text style={{ color: 'green', fontSize: 25 }}>${company.price}</Text>
-          <Text style={{ color: 'red', fontSize: 12 }}>{company.change}%</Text>
+          <Text style={{ color: 'green', fontSize: 25 }}>${parseFloat(company.TotalValue).toFixed(2)}</Text>
+          <Text style={{ color: 'red', fontSize: 12 }}>%</Text>
         </View>
       </View>
       <View >
         <Modal isVisible={isModalVisible}>
             <View style={styles.companyModal}>
-              <Text style={{ color: 'blue', fontSize: 35 }}>{company.name}</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
+                <Text style={{color: 'black'}}> - </Text>
+                <Text style={{color: 'black'}}>$ {parseFloat(company.StockValue).toFixed(2)}</Text>
+              </View>
               <VictoryChart>
                 <VictoryCandlestick
                     data={graph}
@@ -316,8 +359,7 @@ const styles = StyleSheet.create({
   },
 
   searchContainer: {
-    flex: 1/2,
-    width: '80%',
+    width: '90%',
     paddingTop: 30,
     paddingBottom: 20,
     alignItems: 'center',
@@ -331,12 +373,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     paddingLeft: 30,
-    width: '90%',
-    borderRadius: 50
+    width: '100%',
+    borderRadius: 50,
+    top: '10%',
+    height: '90%'
   },
 
   listContainer: {
-    flex: 4,
+    flex: 0.85,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
@@ -344,7 +388,7 @@ const styles = StyleSheet.create({
     borderColor: '#95949a',
     margin: 10,
     borderRadius: 10,
-    top: '-3%'
+    top: '7%'
   },
 
   cardContainer: {
@@ -354,7 +398,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'black',
     padding: 10,
-    margin: 10,
+    margin: 0,
   },
   companyModal: {
     backgroundColor: 'white',
@@ -384,13 +428,31 @@ const styles = StyleSheet.create({
     width: '60%',
     alignItems: 'center',
     borderRadius: 20,
-    top: -4
+    top: -4,
+  },
+  searchBarButton: {
+    backgroundColor: 'rgb(24,104,217)',
+    height: '60%',
+    width: '30%',
+    alignItems: 'center',
+    borderRadius: 20,
+    top: '10.2%',
+    left: '-210%',
+  },
+
+  searchButtonText: {
+    color: 'white',
   },
 
   companySearchModal: {
     backgroundColor: 'white',
     height: (screen.height / 10) * 7,
     alignItems: 'center'
+  },
+
+  BuySellClose: {
+    backgroundColor: 'rgb(24,104,217)',
+    height: 50
   },
 });
 

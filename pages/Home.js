@@ -32,7 +32,7 @@ const MoneyInvested = () => {
         setHoldings(res.Holdings.toFixed(2));
       })
       .catch(function (error) {
-        alert(error);
+        alert('error in home');
       });
   }, []);
 
@@ -145,8 +145,8 @@ function Home() {
   return (
 
     <Tabs.Navigator
-      initialRouteName="Home"
-      tabBarOptions={{ labelStyle: { fontSize: 10 } }}
+      initialRouteName="Login"
+      tabBarOptions={{ labelStyle: { fontSize: 9 } }}
     >
       <Tabs.Screen name="Leaderboard" component={LeaderBoard} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />

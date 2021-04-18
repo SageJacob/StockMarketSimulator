@@ -13,10 +13,6 @@ const TitleColor = '#142949';
 const TextColor = 'white';
 let global_user = '';
 
-const Rectangle = () => {
-  return <View style={styles.rectangle} />;
-};
-
 let user = '';
 let pass = '';
 
@@ -33,12 +29,33 @@ let email = '';
 const handleEmail = (text) => {
   email = text;
 }
+let token = '';
+let newPass = '';
+
+const handleToken = (text) => {
+  token = text;
+}
+
+const handleNewPass = (text) => {
+  newPass = text;
+}
+
+let confirmPass = '';
+
+const handleConfirmPass = (text) => {
+  confirmPass = text;
+}
+
 
 
 const LoginActivity = ({ navigation }) => {
   const [passwordModal, setPasswordModalVisible] = useState(false);
   const togglePasswordModal = () => {
     setPasswordModalVisible(!passwordModal);
+  };
+  const [tokenModal, setTokenModal] = useState(false);
+  const toggleTokenModal = () => {
+    setTokenModal(!tokenModal);
   };
   const postCall = () => {
     axios
@@ -62,10 +79,25 @@ const LoginActivity = ({ navigation }) => {
       })
       .then(function (response) {
         togglePasswordModal();
+        toggleTokenModal();
       })
       .catch(function (error) {
         // handle error
         alert('There was an error.');
+      });
+  };
+  const tokenPassCall = () => {
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/auth/reset/'.concat(token), {
+        "Password": newPass,
+        "ConfirmPassword": confirmPass
+      })
+      .then(function (response) {
+        toggleTokenModal();
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error);
       });
   };
 
@@ -121,7 +153,41 @@ const LoginActivity = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
               </View>
-              <Image style={styles.ModalImage} source={require('../assets/logo.png')}></Image>
+            </View>
+          </Modal>
+        </View>
+        <View >
+          <Modal isVisible={tokenModal}>
+            <View style={styles.reset_Token_confirm}>
+              <View style={styles.ModalTokenLocation}>
+                <Text style={styles.ResetModalText}>Enter Token</Text>
+                <TextInput
+                  style={styles.modalResetTextBox}
+                  placeholder="Enter token"
+                  placeholderTextColor='silver'
+                  onChangeText={handleToken} />
+                <Text style={styles.ResetModalText}>New Password</Text>
+                <TextInput
+                  style={styles.modalResetTextBox}
+                  placeholder="Enter password"
+                  placeholderTextColor='silver'
+                  onChangeText={handleNewPass} />
+                <Text style={styles.ResetModalText}>Confirm Password</Text>
+                <TextInput
+                  style={styles.modalResetTextBox}
+                  placeholder="Confirm password"
+                  placeholderTextColor='silver'
+                  onChangeText={handleConfirmPass} />
+                <View style={styles.tokenArrange}>
+                  <TouchableOpacity style={styles.ModalTokenButton} onPress={tokenPassCall}>
+                    <Text style={styles.ModalTokenText}>submit</Text>
+                  </TouchableOpacity>
+                  <Text style={{color: 'rgb(92,92,92)', paddingRight: 20} }>.</Text>
+                  <TouchableOpacity style={styles.ModalTokenButton} onPress={toggleTokenModal}>
+                    <Text style={styles.ModalTokenText}>cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </Modal>
         </View>
@@ -236,6 +302,52 @@ const styles = StyleSheet.create({
     width: '10%',
     left: '44%',
     top: '17%'
+  },
+
+  ModalTokenLocation: {
+    borderRadius: 20,
+    left: 10,
+    flex: 1
+  },
+
+  ModalTokenButton: {
+    height: '100%',
+    backgroundColor: 'rgb(24,104,217)',
+    width: '40%',
+    borderRadius: 20,
+    paddingTop: 10,
+    
+  },
+
+  reset_Token_confirm: {
+    backgroundColor: 'rgb(92,92,92)', height: (screen.height / 10) * 5, borderRadius: 10,
+  },
+
+  ResetModalText: {
+    color: 'white',
+    fontSize: 20,
+    left: 10,
+    marginTop: 10,
+    marginBottom: 3
+  },
+
+  modalResetTextBox: {
+    height: '14%', width: '90%', backgroundColor: 'transparent', borderColor: 'black', borderWidth: 1,
+    paddingLeft: 10, borderRadius: 20, color: 'white', fontSize: 20, textAlign: 'center', marginBottom: 5,
+  },
+  tokenArrange: {
+    flexDirection: 'row', justifyContent: 'center', top: 20, left: '-4%'
+  },
+
+  ModalTokenImage: {
+    height: '15%',
+    width: '10%',
+    left: '42%',
+    top: '-3%'
+  },
+
+  ModalTokenText: {
+    color: TextColor, fontSize: 25, top: -5, left: '20%'
   },
 
 });
