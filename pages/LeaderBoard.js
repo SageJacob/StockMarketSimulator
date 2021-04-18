@@ -58,10 +58,10 @@ const ListCard = ({ username, accBalance }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={{ alignItems: 'flex-start' }}>
-        <Text style={{ color: 'blue', fontSize: 25 }}>{username}</Text>
+        <Text style={{ color: 'blue', fontSize: 20 }}>{username}</Text>
       </View>
       <View style={{ alignItems: 'flex-end' }}>
-        <Text style={{ color: 'green', fontSize: 25 }}>${accBalance}</Text>
+        <Text style={{ color: 'green', fontSize: 20 }}>${accBalance}</Text>
       </View>
     </View>
   )

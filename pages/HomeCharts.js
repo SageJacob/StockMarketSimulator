@@ -3,6 +3,7 @@ import { View, Dimensions, StyleSheet } from 'react-native';
 import { VictoryChart, VictoryBar, VictoryPie, VictoryAxis, VictoryLabel } from 'victory-native';
 import axios from 'axios';
 import { global_user } from './LoginActivity';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const screen = Dimensions.get("screen");
 const graphicColor = ['#388087', '#6fb3b8', '#badfe7'];
@@ -65,12 +66,13 @@ const HomeCharts = () => {
       <View style={styles.barContainer}>
 
         <VictoryChart
-          domainPadding={{ x: 30 }}
+          domainPadding={{ x: 15 }}
         >
 
           <VictoryBar
-            style={{ data: { fill: "#026C7C" } }}
+            style={{ data: { fill: "#6FDCBB" }, tickLabels: { fill: 'white' } }}
             data={barChartData}
+
           />
 
           <VictoryAxis
@@ -78,41 +80,51 @@ const HomeCharts = () => {
             tickFormat={(t) => Math.floor(t)}
             label='Shares Owned'
             style={{
-              axisLabel: { padding: 30 }
+              axis: { stroke: 'white' },
+              axisLabel: { padding: 30, fill: 'white' },
+              tickLabels: { fill: 'white' }
             }}
           />
 
           <VictoryAxis
             offsetY={50}
+            style={{
+              axis: { stroke: 'white' },
+              tickLabels: { fill: 'white', fontSize: 10 }
+            }}
           />
 
         </VictoryChart>
       </View>
 
-      <VictoryChart>
-        <VictoryPie
-          //animate={{ easing: 'exp' }}
-          data={pieChartData}
-          width={250}
-          height={250}
-          colorScale={graphicColor}
-          innerRadius={60}
-        />
-        <VictoryAxis
-          style={{
-            axis: { stroke: "transparent" },
-            ticks: { stroke: "transparent" },
-            tickLabels: { fill: "transparent" }
-          }}
-        />
+      <View style={styles.pieContainer}>
 
-        {/* <VictoryLabel
+        <VictoryChart>
+          <VictoryPie
+            //animate={{ easing: 'exp' }}
+            data={pieChartData}
+            width={250}
+            height={250}
+            colorScale={graphicColor}
+            innerRadius={60}
+            style={{ labels: { fill: 'white' } }}
+          />
+          <VictoryAxis
+            style={{
+              axis: { stroke: "transparent" },
+              ticks: { stroke: "transparent" },
+              tickLabels: { fill: "transparent" }
+            }}
+          />
+
+          {/* <VictoryLabel
           textAnchor='middle'
           x={205} y={150}
           text='$5000000'
         /> */}
 
-      </VictoryChart>
+        </VictoryChart>
+      </View>
     </View>
   )
 }
@@ -120,11 +132,19 @@ const HomeCharts = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 12,
-    backgroundColor: '#f1eff1'
+    //backgroundColor: '#f1eff1',
+    height: screen.height,
   },
 
   barContainer: {
-    marginLeft: 5
+    flex: 1,
+    marginLeft: 5,
+    marginBottom: 20
+  },
+
+  pieContainer: {
+    flex: 1,
+    paddingBottom: 15,
   }
 });
 

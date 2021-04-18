@@ -10,6 +10,8 @@ import { getToken } from './LoginActivity';
 import { global_user } from './LoginActivity';
 import HomeCharts from './HomeCharts';
 import LeaderBoard from './LeaderBoard';
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 const screen = Dimensions.get("screen");
 
@@ -19,9 +21,9 @@ const MoneyInvested = (money) => {
 
   return (
     <View style={styles.header}>
-      <Text style={{ color: 'blue', fontSize: 25 }}>Welcome, {global_user}</Text>
-      <Text style={{ color: 'black', fontSize: 15 }}>Cash Balance: ${money.cashBalance}</Text>
-      <Text style={{ color: 'forestgreen', fontSize: 15 }}>Holdings: ${money.holdings}</Text>
+      <Text style={{ color: '#F671FF', fontSize: 25 }}>Welcome, {global_user}</Text>
+      <Text style={{ color: 'lime', fontSize: 15 }}>Cash Balance: ${money.cashBalance}</Text>
+      <Text style={{ color: '#FFE900', fontSize: 15 }}>Holdings: ${money.holdings}</Text>
     </View>
   )
 }
@@ -100,11 +102,16 @@ const HomeScreen = ({ navigation }) => {
 
 
   return (
-    <View style={styles.container}>
-      <StatusBar hidden={false} />
-      <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
-      <HomeCharts />
-    </View >
+    <LinearGradient
+      colors={['rgba(  0, 92, 222   ,0.9)', 'rgba(  0, 0, 0 ,0.9)']}
+      style={styles.container}>
+
+      <View style={styles.container}>
+        <StatusBar hidden={false} />
+        <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
+        <HomeCharts />
+      </View >
+    </LinearGradient>
   )
 }
 
@@ -125,40 +132,24 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8C8C8C',
+    //backgroundColor: '#8C8C8C',
     height: screen.height,
-    marginBottom: 10
+    //marginBottom: 10
   },
 
   header: {
     flex: 2,
-    backgroundColor: '#e6e6e6',
+    //backgroundColor: '#e6e6e6',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   graphArea: {
-    backgroundColor: '#f1eff1',
+    //backgroundColor: '#f1eff1',
     alignItems: 'center',
     flex: 6,
     paddingLeft: 25
   },
-
-  intervals: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: 300,
-  },
-
-  button: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 55,
-    backgroundColor: '#51A3A3',
-    padding: 15,
-    borderRadius: 30
-  }
 });
 
 export default Home;
