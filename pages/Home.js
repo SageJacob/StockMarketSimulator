@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, StatusBar, TouchableHighlight, Dimensions } from 'react-native';
-import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native';
 import axios from 'axios';
 import Portfolio from './Portfolio';
 import Account from './Account';
@@ -11,6 +10,7 @@ import { global_user } from './LoginActivity';
 import HomeCharts from './HomeCharts';
 import LeaderBoard from './LeaderBoard';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const screen = Dimensions.get("screen");
@@ -28,77 +28,44 @@ const MoneyInvested = (money) => {
   )
 }
 
-
-
-
-// const MoneyGraph = () => {
-//   return (
-//     <View style={styles.graphArea}>
-//       <VictoryChart
-//         theme={VictoryTheme.material}
-//         width={400}
-//         height={400}
-//         padding={60}
-//         style={{
-//           background: { fill: "#f1eff1" }
-//         }}
-//       >
-
-//         <VictoryAxis
-//           label='Time'
-//           style={{
-//             axis: { stroke: "black" },
-//             grid: { stroke: "none" },
-//             axisLabel: { padding: 40, fill: 'black' },
-//             tickLabels: { fill: 'black' }
-//           }}
-//         />
-//         <VictoryAxis
-//           dependentAxis
-//           label='Earnings ($)'
-//           style={{
-//             axis: { stroke: "black" },
-//             grid: { stroke: "none" },
-//             axisLabel: { padding: 35, fill: 'black' },
-//             tickLabels: { fill: 'black' }
-//           }}
-//         />
-//         <VictoryLine
-//           data={data}
-//           style={{
-//             data: { stroke: "lime", strokeWidth: 3 },
-//           }}
-//         />
-//       </VictoryChart>
-//       <TimeIntervals />
-
-//     </View>
-//   )
-// }
-
 const HomeScreen = ({ navigation }) => {
   const [cashBalance, setCashBalance] = useState([]);
   const [holdings, setHoldings] = useState([]);
+  const [barChartData, setBarChartData] = useState([]);
+  const [pieChartData, setPieChartData] = useState([]);
 
-  React.useEffect(() => {
-    const getPortfolio = navigation.addListener('focus', () => {
+  useFocusEffect(
+    React.useCallback(() => {
       axios
         .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-          // remember to use global_user  
           "Login": global_user
         })
         .then(function (response) {
           let res = response.data;
           setCashBalance(res.Cash.toFixed(2));
           setHoldings(res.Holdings.toFixed(2));
+
+          var barData = [];
+          var pieData = [];
+
+          for (var i = 0; i < res.StocksOwned.length; i++) {
+
+            var barTemp = { x: res.StocksOwned[i].Company, y: res.StocksOwned[i].Amount };
+            var pieTemp = { x: res.StocksOwned[i].Company, y: res.StocksOwned[i].TotalValue };
+
+            barData.push(barTemp);
+            pieData.push(pieTemp);
+          }
+
+          setBarChartData(barData);
+          setPieChartData(pieData);
+
         })
         .catch(function (error) {
           alert(error);
         });
-    });
-
-    return getPortfolio;
-  }, [navigation]);
+    }, [])
+  );
 
 
   return (
@@ -109,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.container}>
         <StatusBar hidden={false} />
         <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
-        <HomeCharts />
+        <HomeCharts barChartData={barChartData} pieChartData={pieChartData} />
       </View >
     </LinearGradient>
   )
@@ -132,20 +99,16 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#8C8C8C',
     height: screen.height,
-    //marginBottom: 10
   },
 
   header: {
     flex: 2,
-    //backgroundColor: '#e6e6e6',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   graphArea: {
-    //backgroundColor: '#f1eff1',
     alignItems: 'center',
     flex: 6,
     paddingLeft: 25
