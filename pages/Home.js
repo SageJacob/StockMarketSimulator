@@ -1,97 +1,126 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, StatusBar, TouchableHighlight } from 'react-native';
 import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native';
+import axios from 'axios';
 import Portfolio from './Portfolio';
 import Account from './Account';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import * as SecureStore from 'expo-secure-store';
-import {getToken} from './LoginActivity';
+import { getToken } from './LoginActivity';
+import { global_user } from './LoginActivity';
+import HomeCharts from './HomeCharts';
 
 const Tabs = createMaterialTopTabNavigator();
 
 const MoneyInvested = () => {
+
+  const [cashBalance, setCashBalance] = useState([]);
+  const [holdings, setHoldings] = useState([]);
+
+
+  useEffect(() => {
+
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
+        // remember to use global_user  
+        "Login": global_user
+      })
+      .then(function (response) {
+        let res = response.data;
+        setCashBalance(res.Cash.toFixed(2));
+        setHoldings(res.Holdings.toFixed(2));
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  }, []);
+
+
   return (
-    <View style={styles.money}>
-      <Text style={{ color: 'blue', fontSize: 25 }}>Money Invested</Text>
-      <Text style={{ color: 'black', fontSize: 25 }}>$15,000</Text>
-      <Text style={{ color: 'forestgreen', fontSize: 20 }}>(+$1,000)</Text>
+    <View style={styles.header}>
+      <Text style={{ color: 'blue', fontSize: 25 }}>Welcome, {global_user}</Text>
+      <Text style={{ color: 'black', fontSize: 15 }}>Cash Balance: ${cashBalance}</Text>
+      <Text style={{ color: 'forestgreen', fontSize: 15 }}>Holdings: ${holdings}</Text>
     </View>
   )
 }
 
 
-const data = [
-  { x: 0, y: 0 },
-  { x: 1, y: 2 },
-  { x: 2, y: 1 },
-  { x: 3, y: 3 },
-  { x: 4, y: 4 },
-];
 
-const MoneyGraph = () => {
-  return (
-    <View style={styles.graphArea}>
-      <VictoryChart
-        theme={VictoryTheme.material}
-        width={400}
-        height={400}
-        padding={60}
-        style={{
-          background: { fill: "#f1eff1" }
-        }}
-      >
 
-        <VictoryAxis
-          label='Time'
-          style={{
-            axis: { stroke: "black" },
-            grid: { stroke: "none" },
-            axisLabel: { padding: 40, fill: 'black' },
-            tickLabels: { fill: 'black' }
-          }}
-        />
-        <VictoryAxis
-          dependentAxis
-          label='Earnings ($)'
-          style={{
-            axis: { stroke: "black" },
-            grid: { stroke: "none" },
-            axisLabel: { padding: 35, fill: 'black' },
-            tickLabels: { fill: 'black' }
-          }}
-        />
-        <VictoryLine
-          data={data}
-          style={{
-            data: { stroke: "lime", strokeWidth: 3 },
-          }}
-        />
-      </VictoryChart>
-      <TimeIntervals />
+// const MoneyGraph = () => {
+//   return (
+//     <View style={styles.graphArea}>
+//       <VictoryChart
+//         theme={VictoryTheme.material}
+//         width={400}
+//         height={400}
+//         padding={60}
+//         style={{
+//           background: { fill: "#f1eff1" }
+//         }}
+//       >
 
-    </View>
-  )
-}
+//         <VictoryAxis
+//           label='Time'
+//           style={{
+//             axis: { stroke: "black" },
+//             grid: { stroke: "none" },
+//             axisLabel: { padding: 40, fill: 'black' },
+//             tickLabels: { fill: 'black' }
+//           }}
+//         />
+//         <VictoryAxis
+//           dependentAxis
+//           label='Earnings ($)'
+//           style={{
+//             axis: { stroke: "black" },
+//             grid: { stroke: "none" },
+//             axisLabel: { padding: 35, fill: 'black' },
+//             tickLabels: { fill: 'black' }
+//           }}
+//         />
+//         <VictoryLine
+//           data={data}
+//           style={{
+//             data: { stroke: "lime", strokeWidth: 3 },
+//           }}
+//         />
+//       </VictoryChart>
+//       <TimeIntervals />
+
+//     </View>
+//   )
+// }
 
 const TimeIntervals = () => {
+
+  const [selectedButton, setSelectedButton] = useState('');
+
+  const toggleSelectedButton = (selection) => {
+    console.log('button before: ' + selectedButton);
+    setSelectedButton(selection);
+    console.log('button after: ' + selectedButton);
+  }
+
   return (
     <View style={styles.intervals}>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => { console.log(1) }}>
+      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('day')}>
         <View>
           <Text style={{ color: 'white' }}>1D</Text>
         </View>
       </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => { 1 }}>
+      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('week')}>
         <View>
           <Text style={{ color: 'white' }}>1W</Text>
         </View>
       </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => { 1 }}>
+      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('month')}>
         <View>
           <Text style={{ color: 'white' }}>1M</Text>
         </View>
       </TouchableHighlight>
-      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => { 1 }}>
+      <TouchableHighlight underlayColor={'#A4303F'} style={styles.button} onPress={() => toggleSelectedButton('year')}>
         <View>
           <Text style={{ color: 'white' }}>1Y</Text>
         </View>
@@ -105,7 +134,8 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <StatusBar hidden={false} />
       <MoneyInvested />
-      <MoneyGraph />
+      {/* <MoneyGraph /> */}
+      <HomeCharts />
     </View >
   )
 }
@@ -127,8 +157,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8C8C8C'
   },
 
-  money: {
-    flex: 5,
+  header: {
+    flex: 2,
     backgroundColor: '#e6e6e6',
     justifyContent: 'center',
     alignItems: 'center'
@@ -137,7 +167,7 @@ const styles = StyleSheet.create({
   graphArea: {
     backgroundColor: '#f1eff1',
     alignItems: 'center',
-    flex: 12,
+    flex: 6,
     paddingLeft: 25
   },
 
