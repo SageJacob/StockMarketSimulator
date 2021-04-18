@@ -21,6 +21,7 @@ const MoneyInvested = (money) => {
   // const [holdings, setHoldings] = useState([]);
 
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   axios
   //     .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
@@ -36,6 +37,24 @@ const MoneyInvested = (money) => {
   //       alert(error);
   //     });
   // }, []);
+=======
+  useEffect(() => {
+
+    axios
+      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
+        // remember to use global_user  
+        "Login": global_user
+      })
+      .then(function (response) {
+        let res = response.data;
+        setCashBalance(res.Cash.toFixed(2));
+        setHoldings(res.Holdings.toFixed(2));
+      })
+      .catch(function (error) {
+        alert('error in home');
+      });
+  }, []);
+>>>>>>> b60de0a7511281a3d2c6b9c6cfb60721abd72d96
 
 
   return (
@@ -168,8 +187,8 @@ const HomeScreen = ({ navigation }) => {
 function Home() {
   return (
     <Tabs.Navigator
-      initialRouteName="Home"
-      tabBarOptions={{ labelStyle: { fontSize: 10 } }}
+      initialRouteName="Login"
+      tabBarOptions={{ labelStyle: { fontSize: 9 } }}
     >
       <Tabs.Screen name="Leaderboard" component={LeaderBoard} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />

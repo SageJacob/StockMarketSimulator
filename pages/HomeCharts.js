@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Dimensions, StyleSheet } from 'react-native';
-import { VictoryChart, VictoryBar, VictoryPie, VictoryAxis } from 'victory-native';
+import { VictoryChart, VictoryBar, VictoryPie, VictoryAxis, VictoryLabel } from 'victory-native';
 import axios from 'axios';
 import { global_user } from './LoginActivity';
 
@@ -49,7 +49,7 @@ const HomeCharts = () => {
 
   }, []);
 
-  const graphicColor = ['#388087', '#6fb3b8', '#badfe7']; // Colors
+  const graphicColor = ['#A032B6', '#60D394', '#E56B6F', '#FFBF46', '#0FA3B1']; // Colors
   //const wantedGraphicData = pieChartData; // Data that we want to display
   //const defaultGraphicData = dummyPieChartData; // Data used to make the animate prop work
 
@@ -61,18 +61,33 @@ const HomeCharts = () => {
 
   return (
     <View style={styles.container}>
-      <VictoryChart
-      //theme={VictoryTheme.material}
-      //domainPadding={10}
-      >
 
-        <VictoryBar
-          style={{ data: { fill: "#c43a31" } }}
-          data={barChartData}
-        />
+      <View style={styles.barContainer}>
 
+        <VictoryChart
+          domainPadding={{ x: 30 }}
+        >
 
-      </VictoryChart>
+          <VictoryBar
+            style={{ data: { fill: "#026C7C" } }}
+            data={barChartData}
+          />
+
+          <VictoryAxis
+            dependentAxis
+            tickFormat={(t) => Math.floor(t)}
+            label='Shares Owned'
+            style={{
+              axisLabel: { padding: 30 }
+            }}
+          />
+
+          <VictoryAxis
+            offsetY={50}
+          />
+
+        </VictoryChart>
+      </View>
 
       <VictoryChart>
         <VictoryPie
@@ -81,13 +96,22 @@ const HomeCharts = () => {
           width={250}
           height={250}
           colorScale={graphicColor}
-          innerRadius={50}
+          innerRadius={60}
         />
-        <VictoryAxis style={{
-          axis: { stroke: "transparent" },
-          ticks: { stroke: "transparent" },
-          tickLabels: { fill: "transparent" }
-        }} />
+        <VictoryAxis
+          style={{
+            axis: { stroke: "transparent" },
+            ticks: { stroke: "transparent" },
+            tickLabels: { fill: "transparent" }
+          }}
+        />
+
+        {/* <VictoryLabel
+          textAnchor='middle'
+          x={205} y={150}
+          text='$5000000'
+        /> */}
+
       </VictoryChart>
     </View>
   )
@@ -97,6 +121,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 12,
     backgroundColor: '#f1eff1'
+  },
+
+  barContainer: {
+    marginLeft: 5
   }
 });
 
