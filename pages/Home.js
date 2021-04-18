@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, StatusBar, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, StatusBar, TouchableHighlight, Dimensions } from 'react-native';
 import { VictoryChart, VictoryLine, VictoryTheme, VictoryAxis } from 'victory-native';
 import axios from 'axios';
 import Portfolio from './Portfolio';
@@ -11,37 +11,38 @@ import { global_user } from './LoginActivity';
 import HomeCharts from './HomeCharts';
 import LeaderBoard from './LeaderBoard';
 
+const screen = Dimensions.get("screen");
+
 const Tabs = createMaterialTopTabNavigator();
 
-const MoneyInvested = () => {
+const MoneyInvested = (money) => {
 
-  const [cashBalance, setCashBalance] = useState([]);
-  const [holdings, setHoldings] = useState([]);
+  // const [cashBalance, setCashBalance] = useState([]);
+  // const [holdings, setHoldings] = useState([]);
 
 
-  useEffect(() => {
-
-    axios
-      .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
-        // remember to use global_user  
-        "Login": global_user
-      })
-      .then(function (response) {
-        let res = response.data;
-        setCashBalance(res.Cash.toFixed(2));
-        setHoldings(res.Holdings.toFixed(2));
-      })
-      .catch(function (error) {
-        alert(error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
+  //       // remember to use global_user  
+  //       "Login": global_user
+  //     })
+  //     .then(function (response) {
+  //       let res = response.data;
+  //       setCashBalance(res.Cash.toFixed(2));
+  //       setHoldings(res.Holdings.toFixed(2));
+  //     })
+  //     .catch(function (error) {
+  //       alert(error);
+  //     });
+  // }, []);
 
 
   return (
     <View style={styles.header}>
       <Text style={{ color: 'blue', fontSize: 25 }}>Welcome, {global_user}</Text>
-      <Text style={{ color: 'black', fontSize: 15 }}>Cash Balance: ${cashBalance}</Text>
-      <Text style={{ color: 'forestgreen', fontSize: 15 }}>Holdings: ${holdings}</Text>
+      <Text style={{ color: 'black', fontSize: 15 }}>Cash Balance: ${money.cashBalance}</Text>
+      <Text style={{ color: 'forestgreen', fontSize: 15 }}>Holdings: ${money.holdings}</Text>
     </View>
   )
 }
@@ -130,12 +131,35 @@ const TimeIntervals = () => {
   )
 }
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  const [cashBalance, setCashBalance] = useState([]);
+  const [holdings, setHoldings] = useState([]);
+
+  React.useEffect(() => {
+    const getPortfolio = navigation.addListener('focus', () => {
+      axios
+        .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/getPortfolio', {
+          // remember to use global_user  
+          "Login": global_user
+        })
+        .then(function (response) {
+          let res = response.data;
+          setCashBalance(res.Cash.toFixed(2));
+          setHoldings(res.Holdings.toFixed(2));
+        })
+        .catch(function (error) {
+          alert(error);
+        });
+    });
+
+    return getPortfolio;
+  }, [navigation]);
+
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={false} />
-      <MoneyInvested />
-      {/* <MoneyGraph /> */}
+      <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
       <HomeCharts />
     </View >
   )
@@ -143,7 +167,6 @@ const HomeScreen = () => {
 
 function Home() {
   return (
-
     <Tabs.Navigator
       initialRouteName="Home"
       tabBarOptions={{ labelStyle: { fontSize: 10 } }}
@@ -159,7 +182,8 @@ function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#8C8C8C'
+    backgroundColor: '#8C8C8C',
+    height: screen.height
   },
 
   header: {
