@@ -50,7 +50,7 @@ const HomeCharts = (data) => {
         <VictoryChart>
           <VictoryPie
             data={data.pieChartData}
-            labels={({ datum }) => datum.x + '\n' + '100%'}
+            labels={({ datum }) => datum.x + '\n' + ((datum.y / data.holdings) * 100).toFixed(2) + '%'}
             width={250}
             height={250}
             colorScale={graphicColor}

@@ -76,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.container}>
         <StatusBar hidden={false} />
         <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
-        <HomeCharts barChartData={barChartData} pieChartData={pieChartData} />
+        <HomeCharts barChartData={barChartData} pieChartData={pieChartData} holdings={holdings} />
       </View >
     </LinearGradient>
   )
