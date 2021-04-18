@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import { getToken } from './LoginActivity';
 import { global_user } from './LoginActivity';
 import HomeCharts from './HomeCharts';
+import LeaderBoard from './LeaderBoard';
 
 const Tabs = createMaterialTopTabNavigator();
 
@@ -143,7 +144,11 @@ const HomeScreen = () => {
 function Home() {
   return (
 
-    <Tabs.Navigator initialRouteName="Home">
+    <Tabs.Navigator
+      initialRouteName="Home"
+      tabBarOptions={{ labelStyle: { fontSize: 10 } }}
+    >
+      <Tabs.Screen name="Leaderboard" component={LeaderBoard} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />
       <Tabs.Screen name="Home" component={HomeScreen} />
       <Tabs.Screen name="Account" component={Account} />
