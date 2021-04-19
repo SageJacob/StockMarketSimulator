@@ -69,7 +69,7 @@ const LoginActivity = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert('There was an error.');
+        alert('There was an error logging in.');
       });
   };
   const ResetPassCall = () => {
@@ -83,7 +83,7 @@ const LoginActivity = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert('There was an error.');
+        alert('There was an error with recovery.');
       });
   };
   const tokenPassCall = () => {
@@ -97,7 +97,7 @@ const LoginActivity = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error processing this request.');
       });
   };
 
@@ -126,7 +126,8 @@ const LoginActivity = ({ navigation }) => {
             style={styles.textBox}
             placeholder="Enter password"
             placeholderTextColor='silver'
-            onChangeText={handlePass} />
+            onChangeText={handlePass} 
+            secureTextEntry={true}/>
           <Text numberOfLines={1}></Text>
 
           <View style={{ flexDirection: 'row', alignItems: 'center'}}>

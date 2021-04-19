@@ -38,7 +38,7 @@ const ListSearchCard = ({ company }) => {
         console.log(res);
         let dataGraph = [];
         for (var i = 0; i < res.c.length; i++) {
-          let temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+          let temp = { x: new Date(res.t[i] * 1000), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
 
           dataGraph.push(temp);
         }
@@ -46,7 +46,7 @@ const ListSearchCard = ({ company }) => {
         setGraphBuy(dataGraph);
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error obtaining the chart.');
       });
   
 };
@@ -61,10 +61,9 @@ const ListSearchCard = ({ company }) => {
         let res = response.data;
         buyAmount = '';
         toggleSearchStockModal();
-        alert(JSON.stringify(res));
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to buy.');
       });
   };
 
@@ -79,10 +78,9 @@ const ListSearchCard = ({ company }) => {
         let res = response.data;
         sellAmount = '';
         toggleSearchStockModal();
-        alert(JSON.stringify(res));
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to sell.');
       });
   };
   return (
@@ -92,7 +90,7 @@ const ListSearchCard = ({ company }) => {
           <Text style={{ color: 'rgb(24,104,217)', fontSize: 25 }}>{company.Company}</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text style={{ color: 'green', fontSize: 25 }}>${company.Quote.c}</Text>
+          <Text style={{ color: 'green', fontSize: 25 }}>${parseFloat(company.Quote.c).toFixed(2)}</Text>
         </View>
       </View>
       <View >
@@ -101,7 +99,7 @@ const ListSearchCard = ({ company }) => {
               <View style={{flexDirection: 'row', top: 5}}>
                 <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
                 <Text style={{color: 'black', fontSize: 35 }}> - </Text>
-                <Text style={{color: 'black', fontSize: 35 }}>${company.Quote.c}</Text>
+                <Text style={{color: 'black', fontSize: 35 }}>${parseFloat(company.Quote.c).toFixed(2)}</Text>
               </View>
               <View style={{left: '4%'}}>
               <VictoryChart>
@@ -126,9 +124,7 @@ const ListSearchCard = ({ company }) => {
                   style={styles.buySellBox}
                   placeholder="Sell"
                   textAlign='center'
-                  onChangeText={handleSell}>
-                  
-                </TextInput>
+                  onChangeText={handleSell}/>
                 <TouchableOpacity style={styles.BuySellClose} onPress={sellStock}>
                   <Text style={{color: 'white', fontSize: 20}}>Sell</Text>
                 </TouchableOpacity>
@@ -165,7 +161,7 @@ const Portfolio = ({ navigation }) => {
           setPortfolio(portfolio);
         })
         .catch(function (error) {
-          alert(error);
+          alert('There was an error obtaining your portfolio.');
         });
     });
 
@@ -186,7 +182,7 @@ const Portfolio = ({ navigation }) => {
         toggleSearch();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error while searching.');
       });
   };
   
@@ -213,6 +209,7 @@ const Portfolio = ({ navigation }) => {
             data={portfolio}
             renderItem={({ item }) => <ListCard company={item} />}
             keyExtractor={(item, index) => index.toString()}
+            removeClippedSubviews={false}
           />
         </View>
         <View>
@@ -222,9 +219,10 @@ const Portfolio = ({ navigation }) => {
                 data={list}
                 renderItem={({ item }) => <ListSearchCard company={item} />}
                 keyExtractor={(item, index) => index.toString()}
+                removeClippedSubviews={false}
               />
 
-            <TouchableOpacity style={styles.searchButton} title='close' onPress={()=>{toggleSearch();}}>
+            <TouchableOpacity style={styles.searchButton} onPress={()=>{toggleSearch();}}>
               <Text
                 style={{color: 'white', top: '5%', fontSize: 20}}>Close</Text>
             </TouchableOpacity>
@@ -269,7 +267,7 @@ const ListCard = ({ company }) => {
         console.log(res);
         let dataGraph = [];
         for (var i = 0; i < res.c.length; i++) {
-          let temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+          let temp = { x: new Date(res.t[i]*1000), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
 
           dataGraph.push(temp);
         }
@@ -277,7 +275,7 @@ const ListCard = ({ company }) => {
         setGraph(dataGraph);
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error obtaining the chart.');
       });
   
 };
@@ -296,16 +294,15 @@ const ListCard = ({ company }) => {
       })
       .then(function (response) {
         let res = response.data;
-        alert('You just purchased '+ buyAmount + ' stock(s)');
         buyAmount = '';
+        toggleModal();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to buy.');
       });
   };
 
   const sellStock = () => {
-    alert(sellAmount);
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
         "Login": global_user,
@@ -315,11 +312,11 @@ const ListCard = ({ company }) => {
       .then(function (response) {
         let res = response.data;
         sellAmount = '';
-        alert(JSON.stringify(res));
+        toggleModal();
         
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to sell.');
       });
   };
 
@@ -332,8 +329,7 @@ const ListCard = ({ company }) => {
           <Text style={{ color: 'black', fontSize: 12 }}>{company.Amount} Shares</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text style={{ color: 'green', fontSize: 25 }}>${parseFloat(company.TotalValue).toFixed(2)}</Text>
-          <Text style={{ color: 'red', fontSize: 12 }}>%</Text>
+          <Text style={{ color: 'green', fontSize: 25, top: '15%' }}>${parseFloat(company.TotalValue).toFixed(2)}</Text>
         </View>
       </View>
       <View >
@@ -368,9 +364,7 @@ const ListCard = ({ company }) => {
                   style={styles.buySellBox}
                   placeholder="Sell"
                   textAlign='center'
-                  onChangeText={handleSell}>
-                  
-                </TextInput>
+                  onChangeText={handleSell}/>
                 <TouchableOpacity style={styles.BuySellClose} onPress={sellStock}>
                   <Text style={{color: 'white', fontSize: 20, top: -2}}>Sell</Text>
                 </TouchableOpacity>
@@ -415,12 +409,11 @@ const styles = StyleSheet.create({
     flex: 0.85,
     backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#95949a',
     margin: 10,
     borderRadius: 10,
-    top: '7%'
+    top: '7%',
   },
 
   cardContainer: {
@@ -430,7 +423,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'black',
     padding: 10,
-    margin: 0,
   },
   companyModal: {
     backgroundColor: 'white',
