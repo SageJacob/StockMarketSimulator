@@ -6,7 +6,10 @@ const screen = Dimensions.get("screen");
 
 const HomeCharts = (data) => {
 
-  const graphicColor = ['#A032B6', '#60D394', '#E56B6F', '#FFBF46', '#0FA3B1'];
+  const graphicColor1 = ['#A032B6', '#60D394', '#E56B6F', '#FFBF46', '#0FA3B1'];
+  const graphicColor2 = ['#A032B6', '#60D394', '#E56B6F', '#FFBF46', '#0FA3B1', '#A23F47'];
+
+  const graphicColor = data.pieChartData.length % 2 == 0 ? graphicColor2 : graphicColor1;
 
   return (
     <View style={styles.container}>
@@ -38,7 +41,7 @@ const HomeCharts = (data) => {
             offsetY={50}
             style={{
               axis: { stroke: 'white' },
-              tickLabels: { fill: 'white', fontSize: 10 }
+              tickLabels: { fill: 'white', fontSize: 12, letterSpacing: 4 }
             }}
           />
 
@@ -55,7 +58,7 @@ const HomeCharts = (data) => {
             height={250}
             colorScale={graphicColor}
             innerRadius={60}
-            style={{ labels: { fill: 'white', fontSize: 10 } }}
+            style={{ labels: { fill: 'white', fontSize: 12, letterSpacing: 2 } }}
             padAngle={4}
           />
           <VictoryAxis
