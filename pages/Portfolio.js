@@ -303,7 +303,6 @@ const ListCard = ({ company }) => {
   };
 
   const sellStock = () => {
-    alert(sellAmount);
     axios
       .post('https://group20-stocksimulatorv2.herokuapp.com/api/portfolios/sellStock', {
         "Login": global_user,
