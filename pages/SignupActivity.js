@@ -28,11 +28,11 @@ const SignupActivity = ({ navigation }) => {
         "Password2": confirm
       })
         .then(function (response) {
-          let res = response.data;
+          alert('Success! Please check your email for verification.');
         })
         .catch(function (error) {
           // handle error
-          alert('There was an error.');
+          alert('There was an issue during registration.');
         });
     };
     let [first, onChangeFirst] = React.useState(null);

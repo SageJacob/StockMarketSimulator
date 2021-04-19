@@ -200,21 +200,21 @@ const Account = ({ navigation }) => {
               <Text style={styles.btnText} onPress={()=>navigation.navigate('Login')}> Sign out</Text>
           </TouchableOpacity>
           <View>
-            <TouchableOpacity style={styles.DeleteButton}>
-                <Text style={styles.deleteBtnText} onPress={toggleDeleteModal}> Delete Account</Text>
+            <TouchableOpacity style={styles.DeleteButton} onPress={toggleDeleteModal}>
+                <Text style={styles.deleteBtnText}> Delete Account</Text>
             </TouchableOpacity>
           </View>
           <View >
             <Modal isVisible={deleteModalConfirm}>
               <View style={styles.reset_Token_confirm}>
-                <View style={styles.ModalTokenLocation}>
-                  <Text style={styles.DeleteConfirmText}>Are you sure? Your entire account will be removed</Text>
+                <View style={styles.ModalDeleteLocation}>
+                  <Text style={styles.DeleteConfirmText}>Are you sure? Your entire account will be removed.</Text>
                   <View style={styles.tokenArrange}>
-                    <TouchableOpacity style={styles.ModalTokenButton} onPress={DeleteUserCall}>
+                    <TouchableOpacity style={styles.ModalDeleteButton} onPress={DeleteUserCall}>
                       <Text style={styles.ModalTokenText}>Submit</Text>
                     </TouchableOpacity>
                     <Text style={{color: 'rgb(92,92,92)', paddingRight: 20} }>.</Text>
-                    <TouchableOpacity style={styles.ModalTokenButton} onPress={toggleDeleteModal}>
+                    <TouchableOpacity style={styles.ModalDeleteButton} onPress={toggleDeleteModal}>
                       <Text style={styles.ModalTokenText}>Cancel</Text>
                     </TouchableOpacity>
                   </View>
@@ -378,5 +378,20 @@ const styles = StyleSheet.create({
   DeleteConfirmText: {
     color: 'white',
     fontSize: 25
-  }
+  },
+  ModalDeleteLocation: {
+    borderRadius: 20,
+    left: '5%',
+    flex: 1,
+    top: '5%',
+    textAlign: 'justify'
+  },
+  ModalDeleteButton: {
+    height: '100%',
+    backgroundColor: 'rgb(24,104,217)',
+    width: '40%',
+    borderRadius: 20,
+    paddingTop: 10,
+    top: '50%'
+  },
 });
