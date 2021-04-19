@@ -38,7 +38,7 @@ const ListSearchCard = ({ company }) => {
         console.log(res);
         let dataGraph = [];
         for (var i = 0; i < res.c.length; i++) {
-          let temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+          let temp = { x: new Date(res.t[i] * 1000), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
 
           dataGraph.push(temp);
         }
@@ -46,7 +46,7 @@ const ListSearchCard = ({ company }) => {
         setGraphBuy(dataGraph);
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error obtaining the chart.');
       });
   
 };
@@ -63,7 +63,7 @@ const ListSearchCard = ({ company }) => {
         toggleSearchStockModal();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to buy.');
       });
   };
 
@@ -80,7 +80,7 @@ const ListSearchCard = ({ company }) => {
         toggleSearchStockModal();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to sell.');
       });
   };
   return (
@@ -90,7 +90,7 @@ const ListSearchCard = ({ company }) => {
           <Text style={{ color: 'rgb(24,104,217)', fontSize: 25 }}>{company.Company}</Text>
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text style={{ color: 'green', fontSize: 25 }}>${company.Quote.c}</Text>
+          <Text style={{ color: 'green', fontSize: 25 }}>${parseFloat(company.Quote.c).toFixed(2)}</Text>
         </View>
       </View>
       <View >
@@ -99,7 +99,7 @@ const ListSearchCard = ({ company }) => {
               <View style={{flexDirection: 'row', top: 5}}>
                 <Text style={{ color: 'rgb(24,104,217)', fontSize: 35 }}>{company.Company}</Text>
                 <Text style={{color: 'black', fontSize: 35 }}> - </Text>
-                <Text style={{color: 'black', fontSize: 35 }}>${company.Quote.c}</Text>
+                <Text style={{color: 'black', fontSize: 35 }}>${parseFloat(company.Quote.c).toFixed(2)}</Text>
               </View>
               <View style={{left: '4%'}}>
               <VictoryChart>
@@ -161,7 +161,7 @@ const Portfolio = ({ navigation }) => {
           setPortfolio(portfolio);
         })
         .catch(function (error) {
-          alert(error);
+          alert('There was an error obtaining your portfolio.');
         });
     });
 
@@ -182,7 +182,7 @@ const Portfolio = ({ navigation }) => {
         toggleSearch();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error while searching.');
       });
   };
   
@@ -267,7 +267,7 @@ const ListCard = ({ company }) => {
         console.log(res);
         let dataGraph = [];
         for (var i = 0; i < res.c.length; i++) {
-          let temp = { x: new Date(res.t[i]), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
+          let temp = { x: new Date(res.t[i]*1000), open: res.o[i], close: res.c[i], high: res.h[i], low: res.l[i] };
 
           dataGraph.push(temp);
         }
@@ -275,7 +275,7 @@ const ListCard = ({ company }) => {
         setGraph(dataGraph);
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error obtaining the chart.');
       });
   
 };
@@ -298,7 +298,7 @@ const ListCard = ({ company }) => {
         toggleModal();
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to buy.');
       });
   };
 
@@ -316,7 +316,7 @@ const ListCard = ({ company }) => {
         
       })
       .catch(function (error) {
-        alert(error);
+        alert('There was an error trying to sell.');
       });
   };
 

@@ -76,7 +76,7 @@ const SignupActivity = ({ navigation }) => {
 
             <TouchableOpacity
               style={styles.create}
-              onPress={postCall}
+              onPress={()=>{postCall(); navigation.navigate('Login');}}
             >
 
             <Text style={styles.btnText}> Create Account</Text>

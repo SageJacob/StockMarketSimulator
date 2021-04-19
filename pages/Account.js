@@ -61,7 +61,7 @@ const Account = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error resetting your portfolio.');
       });
   };
   const ResetPassCall = () => {
@@ -75,7 +75,7 @@ const Account = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error with recovery.');
       });
   };
   const DeleteUserCall = () => {
@@ -89,7 +89,7 @@ const Account = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('Error. Could not finalize deletion.');
       });
   };
   const tokenPassCall = () => {
@@ -103,7 +103,7 @@ const Account = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        alert(error);
+        alert('There was an error processing this request.');
       });
   };
   return (
