@@ -29,7 +29,6 @@ const SignupActivity = ({ navigation }) => {
       })
         .then(function (response) {
           let res = response.data;
-          alert(JSON.stringify(res)); 
         })
         .catch(function (error) {
           // handle error

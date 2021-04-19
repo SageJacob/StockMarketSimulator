@@ -126,7 +126,8 @@ const LoginActivity = ({ navigation }) => {
             style={styles.textBox}
             placeholder="Enter password"
             placeholderTextColor='silver'
-            onChangeText={handlePass} />
+            onChangeText={handlePass} 
+            secureTextEntry={true}/>
           <Text numberOfLines={1}></Text>
 
           <View style={{ flexDirection: 'row', alignItems: 'center'}}>

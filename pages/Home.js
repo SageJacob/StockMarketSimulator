@@ -86,7 +86,7 @@ function Home() {
   return (
     <Tabs.Navigator
       initialRouteName="Home"
-      tabBarOptions={{ labelStyle: { fontSize: 8 } }}
+      tabBarOptions={{ labelStyle: { fontSize: 9 } }}
     >
       <Tabs.Screen name="Leaderboard" component={LeaderBoard} />
       <Tabs.Screen name="Portfolio" component={Portfolio} />
