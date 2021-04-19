@@ -74,9 +74,13 @@ const HomeScreen = ({ navigation }) => {
       style={styles.container}>
 
       <View style={styles.container}>
-        <StatusBar hidden={false} />
-        <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
-        <HomeCharts barChartData={barChartData} pieChartData={pieChartData} holdings={holdings} />
+        <View style={styles.relative}>
+          <StatusBar hidden={false} />
+          <MoneyInvested cashBalance={cashBalance} holdings={holdings} />
+          <View style={styles.chart}>
+            <HomeCharts barChartData={barChartData} pieChartData={pieChartData} holdings={holdings} />
+          </View>
+        </View>
       </View >
     </LinearGradient>
   )
@@ -103,15 +107,25 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flex: 2,
+    flex: 3,
     justifyContent: 'center',
     alignItems: 'center',
+    top: '2%'
   },
 
   graphArea: {
     alignItems: 'center',
     flex: 6,
     paddingLeft: 25
+  },
+
+  relative: {
+    flex: 1
+  },
+
+  chart: {
+    flex: 25,
+    top: '-4%'
   },
 });
 
