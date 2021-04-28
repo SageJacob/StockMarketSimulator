@@ -1,0 +1,11 @@
+Privacy Policy
+Last updated April 28th, 2021.
+
+Building the APK resulted in the following error: 
+
+Your app has an apk with version code 1 that requests the following permissions: android.permission.READ_PHONE_STATE, android.permission.CAMERA, android.permission.READ_CONTACTS, android.permission.RECORD_AUDIO. Apps using these permissions in an APK are required to have a privacy policy set.
+
+
+While these permissions are requested, none are used. No data is collected from the user except when we store login credentials (in which the user’s password is encrypted) and their in-app portfolios into our database. 
+
+Please be aware that this app is merely the result of a class project. It will be minimally maintained and security may be not be optimal so please do not use credentials that you use anywhere else.
